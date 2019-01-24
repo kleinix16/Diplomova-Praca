@@ -11,70 +11,78 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+#include <stdbool.h>
+
 
 char RX_buffer[USART_BUFFER];
 int RX_index = 0;
 
-int system_error = 0;
-int new_msg = 0;
-int watchdog = 0;
+bool system_error = false;
+bool new_msg = false;
+bool watchdog = false;
 
 uint16_t timerx;
 
-void setup_GPIO(void)
+void setup_LED(void)
 {
-	DDRC |= (1 << PORTC4) | (1 << PORTC5); //OE, SERDATA
-	DDRB |= (1 << PORTB1) | (1 << PORTB2); // SRCLK, RCLK
-	sbi(DDRD, PORTD1);					   // TXD USART
-	sbi(DDRD, PORTD7);					   // Control Trans. GP2Y
-	sbi(PORTD, PORTD2);					   // Pull-up S2
-	sbi(DDRD, PORTD5);					   //RES_ESP
-
-	sbi(DDRD, PORTD6); // CO2
-	sbi(DDRD, PORTD7); // Control Trans CO2
-	//sbi(PORTD,PORTD5);				//HW RESET
-	//_delay_ms(10);
-	//cbi(PORTD,PORTD5);				// non_RESET
+	sbi(LED_DDR, G_LED);	//Nastavenie pinu ako vystup
+	sbi(LED_DDR, R_LED);
+	//sbi(LED_DDR, B_LED);	
 	
-	cbi(PORTD,G_LED);
-	cbi(PORTD, G_LED);
-	cbi(PORTB,B_LED);
+	cbi(LED_PORT, G_LED);	//Nastavenie pociatocnej hodnoty - LEDky nestivtia
+	cbi(LED_PORT, R_LED);	
+	//cbi(LED_PORT, B_LED);	
+	
+	sbi(DDRB, B_LED);   //Modra an testovacej doske
+	cbi(PORTB, B_LED);
 }
 
-void setup_T0()
+void setup_BUTTON(void)
+{
+	sbi(BUTTON_PORT, BT_1); //Nastavovanie Pull-Up rezistorov
+	sbi(BUTTON_PORT, BT_2); 
+	sbi(BUTTON_PORT, BT_3); 
+	
+	cbi(BUTTON_DDR, BT_1);	//Nastavenie pinu ako vstup
+	cbi(BUTTON_DDR, BT_2);	
+	cbi(BUTTON_DDR, BT_3);	
+}
+
+void setup_T0_WD()
 {
 	TCCR0A = 0x2;			 //rezim CTC interrupt pri zhode z OCR0A
 	TCCR0B = 0x5;			 //clk/1024
-	OCR0A = 156;			 //156
+	OCR0A = WATCHDOG_ISR_CMP;	 
 	TIMSK0 |= (1 << OCIE0A); //lokalme povolenie prerusenia
 }
 
 void setup_USART(void)
 {
-	DDRD = 0b01001000;
-	DDRB = 0b00000010;
-
-	DDRC |= (1 << M0);  // Tx output
-	DDRC |= (1 << M1);  // Tx output
+	//Nastavovanie AUX portu ako vstup 
 	
-	DDRD |= (1 << PORTD1);  // Tx output
-	DDRD &= ~(1 << PORTD0); //Rx input
+	//Nastavovanie M0 a M1 ako vystup s urovnou 0
+	DDRC  |= (1 << RFM_M0) | (1 << RFM_M1);
+	PORTC &= ~(1 << RFM_M0) & ~(1 << RFM_M1);
 	
+	//Nastavovanie RX a TX 
+	DDRD |=  (1 << USART_TX);  // Tx output
 	
-	
-	cbi(PORTC, M0);
-	cbi(PORTC, M1);
+	DDRD &= ~(1 << USART_RX);  // Rx input
+	PORTD |=  (1 << USART_RX); // RX - Pull Up rezistor
 	
 	
-
 	UBRR0H = (uint8_t)(UBRR_VALUE >> 8); // BAUDERATE
 	UBRR0L = (uint8_t)UBRR_VALUE;
-	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); //8 bits, parit non, 1 stop
-	UCSR0B |= (1 << RXEN0) | (1 << TXEN0);   // enable rx a tx
-	UCSR0A |= (1 << U2X0);
+	
+	UCSR0B|=(1<<TXEN0); //enable TX
+	UCSR0B|=(1<<RXEN0); //enable RX
+	UCSR0B|=(1<<RXCIE0); //RX complete interrupt
+	UCSR0C|=(1<<UCSZ01)|(1<<UCSZ00); // no parity, 1 stop bit, 8-bit data
+	UCSR0A|= (1 << U2X0);//USART Double Transmission Speed
 
-	UCSR0B |= (1 << RXCIE0); //RX complete interrupt
 }
+
+//ToDo - vytvor funkciu na poslanie stringu
 
 uint8_t USART_send(uint8_t a)
 {
@@ -99,85 +107,93 @@ uint8_t USART_receive(void)
 void refresh_LED()
 {
 	//Kontrola, ci je kamera LIVE
-	if (RX_buffer[1] & CAMERA_MASK)
+	if (RX_buffer[1] & CAMERA_MASK)			//Aplikovanie masky pre zistenie stavu kamerz
 	{
-		cbi(PORTD, R_LED);
+		cbi(LED_PORT, R_LED);					//Rozsvietenie cervenej LED
 	}
 	else
 	{
-		sbi(PORTD, R_LED);
+		sbi(LED_PORT, R_LED);					//Zhsnutie cervenej LED
+		
+		//Kontrola, ci je kamera READY
+		if (RX_buffer[2] & CAMERA_MASK)
+		{
+			cbi(LED_PORT, G_LED);				//Rozsvietenie zelenej
+		}
+		else
+		{
+			sbi(LED_PORT, G_LED);				//Zhasnutie zelenej
+		}
 	}
 
-	//Kontrola, ci je kamera READY
-	if (RX_buffer[2] & CAMERA_MASK)
-	{
-		cbi(PORTD, G_LED);
-	}
-	else
-	{
-		sbi(PORTD, G_LED);
-	}
+	
 }
-
 
 
 int main(void)
 {
-	//uint8_t a;
-	setup_GPIO();
+	setup_LED();
 	setup_USART();
-	setup_T0();
+	setup_T0_WD();
 
-	sei();
+	sei();			//Povoleni preruseni
 
 	while (1)
 	{
-		if (!watchdog)
+		if (watchdog == false)
 		{
-			//cbi(PORTB,B_LED);
+			cbi(PORTB,B_LED);					//vypnutie modej LED, pripad kekz sprava pride pocas svietenia 
 			
-			if (new_msg == 1)
+			if (new_msg == true)
 			{
-				switch (RX_buffer[0]) //delenie cinnosti podla typu spravy
+				switch (RX_buffer[0])			//Prvz znak spravz nesie priznak akz typ spravy je prenasany
 				{
-					//Refresh - zmena stavu kamier
-					case 1:
-					case 2:
-					refresh_LED();
-					break;
+					//Refresh / Change - zmena stavu kamier
+					case REFRESH:
+					
+					case CHANGED:
+							refresh_LED();		//Nastavenie LED podla prijatych dat
+							break;
 
-					//prisla sprava od rezie
-					case 'M':
-					USART_send('M');
-					break;
+					//Sprava s informaciou od rezie
+					case MESSAGE:
+							USART_send('M');
+							break;
+							
+					//Sprava s informaciou od rezie
+					case RESPONSE:
+							USART_send('R');
+							break;
 
-					//ToDo - pripad, co ak prijata sprava  zacina zle...
+						//ToDo - pripad, co ak prijata sprava  zacina zle...
 					default:
-					USART_send(RX_buffer[0]);
+							USART_send(RX_buffer[0]);
+							break;
 				}
-				new_msg = 0;
+				new_msg = false;					//Nulovanie priznaku novej spravy
 			}
 		}
-		else
+		else									//V pripade ze Watchdog zaznamena chybu spusti sa blikanie modrej LED
 		{
-			cbi(PORTD,R_LED); 
-			cbi(PORTD,G_LED);
+			//ToDo - pekny efekt by bol, keby sa zoslabovala
+			cbi(LED_PORT,R_LED); 
+			cbi(LED_PORT,G_LED);
 			
 			tbi(PORTB, B_LED);
-			_delay_ms(150);
+			_delay_ms(WATCHDOG_ERROR);
 		}
 
-		if (system_error)
+		if (system_error == true)		//V pripade neocakavaneho stavu zariadenia sa vyhlasi chynby stav bez moznosti navratu - nutny restart
 		{
-			cli();
+			cli();						//Zakazanie preruseni
 			while (1)
 			{
-				tbi(PORTD, R_LED);
-				_delay_ms(1000);
+				tbi(LED_PORT, R_LED);		// Blikanie Cervenej Farby
+				_delay_ms(FATAL_ERROR);
 			}
 		}
 			
-		_delay_ms(100);
+		_delay_ms(CHECK_MAIN_STATUS);	//Cakanie medzi kontrolou stavu systemu	
 	}
 }
 
@@ -187,41 +203,37 @@ int main(void)
 //Ukladanie prichadzajucej spravy do zasobnika
 ISR(USART_RX_vect)
 {
+	watchdog = false;	// nulovanie chyboveho stavu dispeja
+	timerx = 0;			// restart casovaca - watchdog
 
-	
-	watchdog = 0; // nulovanie chyboveho stavu dispeja
-	timerx = 0;   // restart casovaca
-
-	if ((RX_index != USART_BUFFER) && (new_msg == 0))
+	if (new_msg == false)
 	{
 		RX_buffer[RX_index] = UDR0;
 		//USART_send(RX_buffer [RX_index]);  //local echo
 
-		if (RX_buffer[RX_index] == USART_END_CHAR) //
+		if (RX_buffer[RX_index] == USART_END_CHAR) //Kontrola na koncovi znak spravy
 		{
-			new_msg = 1;
+			new_msg = true;
 			RX_index = 0;
-			
 		}
 		else
 		{
-			RX_index++;
+			RX_index++; 
+		
+			if (RX_index >= USART_BUFFER)   // kontrola na pretecenie zasobnika
+			{ 
+				system_error = true;
+			}
 		}
-	}
-	else
-	{
-		system_error = 1;
 	}
 }
 
 ISR(TIMER0_COMPA_vect)
 {
-	if (timerx > 59999)
-	timerx = 0; //600 s
 	timerx++;
-	if (timerx > 800)
+	if (timerx > WATCHDOG_ISR_CNT)
 	{
-		watchdog = 1;
+		watchdog = true;
 		timerx = 0;
 	}
 }

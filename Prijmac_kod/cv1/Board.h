@@ -1,8 +1,8 @@
 /*
  * Board.h
  *
- * Created: 16.11.2017 21:19:29
- *  Author: Juraj
+ * 
+ *  Author: Tomas Klein
  */ 
 
 
@@ -16,47 +16,71 @@
 #define CAMERA 2
 #define CAMERA_MASK 0x02
 
-//***********RFM / USATR****
-#define HTX PORTD1
-#define HRX PORTD0
+//***********MESS STATUS****
+#define REFRESH  0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
+#define CHANGED  0x02	//Sprava generovana pri zmene kamier
+#define MESSAGE  0x04	//Sprava od rezisera
+#define RESPONSE 0x08	//Odpoved kameramanov
+
+//***********TIMES****
+#define WATCHDOG_ERROR 150
+#define FATAL_ERROR 1000
+
+#define CHECK_MAIN_STATUS 100
+#define FATAL_ERROR 1000
+
+#define WATCHDOG_ISR_CMP 156
+#define WATCHDOG_ISR_CNT 800
+
+
+//***********RFM / USART****
+#define USART_PORT PORTD
+#define RFM_PORT PORTD
+
+#define USART_TX PORTD1
+#define USART_RX PORTD0
 
 #define USART_BUFFER 10
 #define USART_END_CHAR 0x61
 
-#define BAUDERATE 9600   //9600
+#define BAUDERATE 9600   
 #define UBRR_VALUE ((F_CPU / (BAUDERATE * 8L)) -1)  //   8....51  ,  16.....25  12.....12
 
-#define M0 PORTC2
-#define M1 PORTC3
+#define RFM_M0 PORTC2	
+#define RFM_M1 PORTC3
 
-#define AUX PORTD6
+#define RFM_AUX PORTD6
 
 //************I2C*****
+#define I2C_PORT PORTC
+#define SDA PORTC4
+#define SCK PORTC5
 
 //**********RGB***
+#define LED_PORT PORTD
+#define LED_DDR DDRD
+
 #define R_LED PORTD6
 #define G_LED PORTD3
 #define B_LED PORTB1
+//#define B_LED PORTD3
+//#define G_LED PORTD5
+//#define R_LED PORTD6
+
 
 //**********TLACIDLA****
-#define TL_1 PORTD2
-#define TL_2 PORTD2
-#define TL_3 PORTD2
+#define BUTTON_PORT PORTB
+#define BUTTON_DDR DDRB
+#define BUTTON_PIN PINB
+
+#define BT_1 PORTB0
+#define BT_2 PORTB1
+#define BT_3 PORTB2
 
 //**********MACRO******
 #define sbi(x,y) x |= _BV(y)	 //nastav bit     (1<<y)
 #define cbi(x,y) x &= ~(_BV(y)) //nuluj bit - using bitwise AND operator
 #define tbi(x,y) x ^= _BV(y)    //zmen bit - using bitwise XOR operator
-
-
-
-#define S_IDLE  0b00000000		// idle
-#define S_ADC   0b00010000		//ADC noise reduction
-#define S_PWD	0b00100000		//power down
-#define S_PWS	0b00110000		//power save
-#define S_STD	0b10100000		//stand by
-#define S_EST	0b10110000		//extended stand by
-#define S_SE	0b01000000		//sleep enable
 
 
 #endif /* BOARD_H_ */
