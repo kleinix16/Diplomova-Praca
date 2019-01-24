@@ -29,8 +29,8 @@
 #define CHECK_MAIN_STATUS 100
 #define FATAL_ERROR 1000
 
-#define WATCHDOG_ISR_CMP 156
-#define WATCHDOG_ISR_CNT 800
+#define WATCHDOG_ISR_CMP 0x9C
+#define WATCHDOG_ISR_CNT 0x0320
 
 
 //***********RFM / USART****

@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000001c0  00000000  00000000  00000754  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00005683  00000000  00000000  00000914  2**0
+  6 .debug_info   0000572c  00000000  00000000  00000914  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00002c8a  00000000  00000000  00005f97  2**0
+  7 .debug_abbrev 00002ca2  00000000  00000000  00006040  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000e54  00000000  00000000  00008c21  2**0
+  8 .debug_line   00000e22  00000000  00000000  00008ce2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000494  00000000  00000000  00009a78  2**2
+  9 .debug_frame  000004a0  00000000  00000000  00009b04  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00002ebb  00000000  00000000  00009f0c  2**0
+ 10 .debug_str    00002f43  00000000  00000000  00009fa4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000b34  00000000  00000000  0000cdc7  2**0
+ 11 .debug_loc    00000b63  00000000  00000000  0000cee7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000190  00000000  00000000  0000d8fb  2**0
+ 12 .debug_ranges 00000190  00000000  00000000  0000da4a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -196,10 +196,10 @@ Disassembly of section .text:
 
 00000230 <setUp_RFM_USART>:
 {
-    while (*text)
-    {
-        sendChar(*text++);
-    }
+	while (*text)
+	{
+		sendChar(*text++);
+	}
 }
  230:	e0 e4       	ldi	r30, 0x40	; 64
  232:	f6 e0       	ldi	r31, 0x06	; 6
@@ -336,41 +336,39 @@ Disassembly of section .text:
 
 int main(void)
 {
-    setUp_RFM_USART();
+	setUp_RFM_USART();
  348:	0e 94 18 01 	call	0x230	; 0x230 <setUp_RFM_USART>
 
-    setUp_PC_USART();
+	setUp_PC_USART();
  34c:	0e 94 3d 01 	call	0x27a	; 0x27a <setUp_PC_USART>
 
-    setTimer_Beacon();
+	setTimer_Beacon();
  350:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <setTimer_Beacon>
-	
+
 	setTimer_Tally();
  354:	0e 94 6d 01 	call	0x2da	; 0x2da <setTimer_Tally>
 
-
-
-    // Enable all interrupt levels in PMIC and enable global interrupts.
-    PMIC.CTRL |= PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
+	// Enable all interrupt levels in PMIC and enable global interrupts.
+	PMIC.CTRL |= PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
  358:	e0 ea       	ldi	r30, 0xA0	; 160
  35a:	f0 e0       	ldi	r31, 0x00	; 0
  35c:	82 81       	ldd	r24, Z+2	; 0x02
  35e:	87 60       	ori	r24, 0x07	; 7
  360:	82 83       	std	Z+2, r24	; 0x02
-    sei();
+	sei();
  362:	78 94       	sei
 
-    while (1)
-    {
-        if (STATE == 1 || STATE == 2)
+	while (1)
+	{
+		if (STATE == REFRESH || STATE == CHANGED)
  364:	80 91 02 20 	lds	r24, 0x2002	; 0x802002 <STATE>
  368:	81 30       	cpi	r24, 0x01	; 1
  36a:	21 f0       	breq	.+8      	; 0x374 <main+0x2c>
  36c:	80 91 02 20 	lds	r24, 0x2002	; 0x802002 <STATE>
  370:	82 30       	cpi	r24, 0x02	; 2
  372:	11 f4       	brne	.+4      	; 0x378 <main+0x30>
-        {
-            sendStatus_RFM();
+		{
+			sendStatus_RFM();
  374:	0e 94 7e 01 	call	0x2fc	; 0x2fc <sendStatus_RFM>
 	#else
 		//round up by default
@@ -419,7 +417,7 @@ ISR(USARTC0_RXC_vect)
  3b4:	bf 93       	push	r27
  3b6:	ef 93       	push	r30
  3b8:	ff 93       	push	r31
-    USART_RXComplete(&USART_data_RFM);
+	USART_RXComplete(&USART_data_RFM);
  3ba:	84 e0       	ldi	r24, 0x04	; 4
  3bc:	90 e2       	ldi	r25, 0x20	; 32
  3be:	0e 94 07 03 	call	0x60e	; 0x60e <USART_RXComplete>
@@ -478,7 +476,7 @@ ISR(USARTE0_RXC_vect)
  41e:	bf 93       	push	r27
  420:	ef 93       	push	r30
  422:	ff 93       	push	r31
-    USART_RXComplete(&USART_data_PC);
+	USART_RXComplete(&USART_data_PC);
  424:	84 e1       	ldi	r24, 0x14	; 20
  426:	90 e2       	ldi	r25, 0x20	; 32
  428:	0e 94 07 03 	call	0x60e	; 0x60e <USART_RXComplete>
@@ -537,7 +535,7 @@ ISR(USARTC0_DRE_vect)
  488:	bf 93       	push	r27
  48a:	ef 93       	push	r30
  48c:	ff 93       	push	r31
-    USART_DataRegEmpty(&USART_data_RFM);
+	USART_DataRegEmpty(&USART_data_RFM);
  48e:	84 e0       	ldi	r24, 0x04	; 4
  490:	90 e2       	ldi	r25, 0x20	; 32
  492:	0e 94 1c 03 	call	0x638	; 0x638 <USART_DataRegEmpty>
@@ -596,7 +594,7 @@ ISR(USARTE0_DRE_vect)
  4f2:	bf 93       	push	r27
  4f4:	ef 93       	push	r30
  4f6:	ff 93       	push	r31
-    USART_DataRegEmpty(&USART_data_PC);
+	USART_DataRegEmpty(&USART_data_PC);
  4f8:	84 e1       	ldi	r24, 0x14	; 20
  4fa:	90 e2       	ldi	r25, 0x20	; 32
  4fc:	0e 94 1c 03 	call	0x638	; 0x638 <USART_DataRegEmpty>
@@ -627,6 +625,7 @@ ISR(USARTE0_DRE_vect)
 
 0000052e <__vector_20>:
 
+
 // Tell compiler to associate this interrupt handler with the TCC0_OVF_vect vector.
 ISR(TCC1_OVF_vect) // TALLY
 {
@@ -641,25 +640,25 @@ ISR(TCC1_OVF_vect) // TALLY
  53e:	2f 93       	push	r18
  540:	8f 93       	push	r24
  542:	9f 93       	push	r25
-    uint8_t port_A_temp = PORT_GetPortValue(&PORTA);
+	uint8_t port_A_temp = PORT_GetPortValue(&PORTA);
  544:	80 91 08 06 	lds	r24, 0x0608	; 0x800608 <__TEXT_REGION_LENGTH__+0x700608>
-    uint8_t port_B_temp = PORT_GetPortValue(&PORTB);
+	uint8_t port_B_temp = PORT_GetPortValue(&PORTB);
  548:	90 91 28 06 	lds	r25, 0x0628	; 0x800628 <__TEXT_REGION_LENGTH__+0x700628>
 
-    if (port_A_temp != port_A || port_B_temp != port_B)
+	if (port_A_temp != port_A || port_B_temp != port_B)
  54c:	20 91 13 20 	lds	r18, 0x2013	; 0x802013 <port_A>
  550:	82 13       	cpse	r24, r18
  552:	04 c0       	rjmp	.+8      	; 0x55c <__vector_20+0x2e>
  554:	20 91 03 20 	lds	r18, 0x2003	; 0x802003 <port_B>
  558:	92 17       	cp	r25, r18
  55a:	d1 f0       	breq	.+52     	; 0x590 <__vector_20+0x62>
-    {
-        port_A = port_A_temp;
+	{
+		port_A = port_A_temp;
  55c:	80 93 13 20 	sts	0x2013, r24	; 0x802013 <port_A>
-        port_B = port_B_temp;
+		port_B = port_B_temp;
  560:	90 93 03 20 	sts	0x2003, r25	; 0x802003 <port_B>
 
-        CAM_LIVE = ((port_A & 0xC0) >> 2) + port_B;
+		CAM_LIVE = ((port_A & 0xC0) >> 2) + port_B;
  564:	80 91 13 20 	lds	r24, 0x2013	; 0x802013 <port_A>
  568:	90 91 03 20 	lds	r25, 0x2003	; 0x802003 <port_B>
  56c:	80 7c       	andi	r24, 0xC0	; 192
@@ -667,19 +666,19 @@ ISR(TCC1_OVF_vect) // TALLY
  570:	86 95       	lsr	r24
  572:	89 0f       	add	r24, r25
  574:	80 93 00 20 	sts	0x2000, r24	; 0x802000 <_edata>
-        CAM_READY = port_A >> 2;
+		CAM_READY = port_A >> 2;
  578:	80 91 13 20 	lds	r24, 0x2013	; 0x802013 <port_A>
  57c:	86 95       	lsr	r24
  57e:	86 95       	lsr	r24
  580:	80 93 01 20 	sts	0x2001, r24	; 0x802001 <CAM_READY>
 
-        STATE = 2; //Odoslanie dat pri zmene na portoch
+		STATE = CHANGED; //Odoslanie dat pri zmene na portoch
  584:	82 e0       	ldi	r24, 0x02	; 2
  586:	80 93 02 20 	sts	0x2002, r24	; 0x802002 <STATE>
-		TC_Restart( &TCC0 );
+		TC_Restart(&TCC0);
  58a:	88 e0       	ldi	r24, 0x08	; 8
  58c:	80 93 09 08 	sts	0x0809, r24	; 0x800809 <__TEXT_REGION_LENGTH__+0x700809>
-    }
+	}
 }
  590:	9f 91       	pop	r25
  592:	8f 91       	pop	r24
@@ -694,7 +693,7 @@ ISR(TCC1_OVF_vect) // TALLY
 
 000005a4 <__vector_14>:
 
-ISR(TCC0_OVF_vect) // BEACON 
+ISR(TCC0_OVF_vect) // BEACON
 {
  5a4:	1f 92       	push	r1
  5a6:	0f 92       	push	r0
@@ -705,7 +704,7 @@ ISR(TCC0_OVF_vect) // BEACON
  5b0:	0f 92       	push	r0
  5b2:	18 be       	out	0x38, r1	; 56
  5b4:	8f 93       	push	r24
-    STATE = 1; //Pravidelne zasielanie dat
+	STATE = 1; //Pravidelne zasielanie dat
  5b6:	81 e0       	ldi	r24, 0x01	; 1
  5b8:	80 93 02 20 	sts	0x2002, r24	; 0x802002 <STATE>
  5bc:	8f 91       	pop	r24

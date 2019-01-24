@@ -37,7 +37,6 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../dma_driver.c \
 ../main.c \
 ../port_driver.c \
 ../TC_driver.c \
@@ -51,28 +50,24 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-dma_driver.o \
 main.o \
 port_driver.o \
 TC_driver.o \
 usart_driver.o
 
 OBJS_AS_ARGS +=  \
-dma_driver.o \
 main.o \
 port_driver.o \
 TC_driver.o \
 usart_driver.o
 
 C_DEPS +=  \
-dma_driver.d \
 main.d \
 port_driver.d \
 TC_driver.d \
 usart_driver.d
 
 C_DEPS_AS_ARGS +=  \
-dma_driver.d \
 main.d \
 port_driver.d \
 TC_driver.d \
@@ -92,8 +87,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-
-
 
 
 
