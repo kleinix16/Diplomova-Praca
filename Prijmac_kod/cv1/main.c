@@ -11,6 +11,13 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+#include <math.h>
+#include <string.h>
+#include "I2C.h"
+
+#include <avr/pgmspace.h>
+#include "ssd1306.h"
+
 #include <stdbool.h>
 
 
@@ -22,6 +29,50 @@ bool new_msg = false;
 bool watchdog = false;
 
 uint16_t timerx;
+
+//uint8_t _i2c_address = 0X78; // this works 0X3C or 0X3D does not
+uint8_t display_buffer[1024];
+
+///////////////////////////////////////////////////////////
+// Transfers the local buffer to the CGRAM in the SSD1306
+void transferDisplayBuffer()
+{
+	uint8_t j = 0;
+
+	// set the Column and Page addresses to 0,0
+	setColAddress();
+	setPageAddress();
+
+	I2C_Start(_i2c_address);
+	//I2C_Write(_i2c_address);
+	I2C_Write(0X40); // data not command
+	for (j = 0; j < 1024; j++)
+	{
+		I2C_Write(display_buffer[j]);
+	}
+
+	I2C_Stop();
+}
+
+void initDisplayBuffer(){
+	memset(display_buffer, 0X04, 1024); // tried other values
+}
+
+void test()
+{
+	// Initialze SSD1306 OLED display
+	reset_display(); // Clear screen
+	setXY(0, 0);	 // Set cursor position, start of line 0
+	sendStr(" Klein Tomas");
+	setXY(1, 1); // Set cursor position, start of line 1
+	sendStr("Mlein Tomas");
+	setXY(2, 0); // Set cursor position, start of line 2
+	sendStr("Klein Tomas");
+	setXY(2, 10); // Set cursor position, line 2 10th character
+	sendStr("CA");
+	setXY(3, 10); // Set cursor position, line 2 10th character
+	sendStr("TEST");
+}
 
 void setup_LED(void)
 {
@@ -129,8 +180,35 @@ void refresh_LED()
 	
 }
 
-
 int main(void)
+{
+	
+	I2C_Init();
+	
+	_delay_ms(10);
+	InitializeDisplay();
+	
+	clear_display();
+	
+	
+	//setup()
+	
+	int j = 0;
+	while(1)
+	{
+		for (uint8_t i = 0; i<8; i++)
+		{
+			//clear_display();
+			printTallyNumber(i,0,0);
+			_delay_ms(100);
+		}
+		printBigNumber(j, 0, 13);
+		j++;
+		
+	}
+}
+
+int main2(void)
 {
 	setup_LED();
 	setup_USART();

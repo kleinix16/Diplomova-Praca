@@ -37,7 +37,9 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../main.c
+../I2C.c \
+../main.c \
+../ssd1306.c
 
 
 PREPROCESSING_SRCS += 
@@ -47,16 +49,24 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-main.o
+I2C.o \
+main.o \
+ssd1306.o
 
 OBJS_AS_ARGS +=  \
-main.o
+I2C.o \
+main.o \
+ssd1306.o
 
 C_DEPS +=  \
-main.d
+I2C.d \
+main.d \
+ssd1306.d
 
 C_DEPS_AS_ARGS +=  \
-main.d
+I2C.d \
+main.d \
+ssd1306.d
 
 OUTPUT_FILE_PATH +=cv1.elf
 
@@ -72,6 +82,10 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 
