@@ -3,13 +3,13 @@ MainStation.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000670  00000000  00000000  00000074  2**1
+  0 .text         0000066e  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00802000  00802000  000006e4  2**0
+  1 .data         00000000  00802000  00802000  000006e2  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000023  00802000  00802000  000006e4  2**0
+  2 .bss          00000023  00802000  00802000  000006e2  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000006e4  2**0
+  3 .comment      00000030  00000000  00000000  000006e2  2**0
                   CONTENTS, READONLY
   4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000714  2**2
                   CONTENTS, READONLY
@@ -47,7 +47,7 @@ Disassembly of section .text:
   2c:	0c 94 16 01 	jmp	0x22c	; 0x22c <__bad_interrupt>
   30:	0c 94 16 01 	jmp	0x22c	; 0x22c <__bad_interrupt>
   34:	0c 94 16 01 	jmp	0x22c	; 0x22c <__bad_interrupt>
-  38:	0c 94 d2 02 	jmp	0x5a4	; 0x5a4 <__vector_14>
+  38:	0c 94 d1 02 	jmp	0x5a2	; 0x5a2 <__vector_14>
   3c:	0c 94 16 01 	jmp	0x22c	; 0x22c <__bad_interrupt>
   40:	0c 94 16 01 	jmp	0x22c	; 0x22c <__bad_interrupt>
   44:	0c 94 16 01 	jmp	0x22c	; 0x22c <__bad_interrupt>
@@ -189,7 +189,7 @@ Disassembly of section .text:
  220:	b2 07       	cpc	r27, r18
  222:	e1 f7       	brne	.-8      	; 0x21c <.do_clear_bss_loop>
  224:	0e 94 a4 01 	call	0x348	; 0x348 <main>
- 228:	0c 94 36 03 	jmp	0x66c	; 0x66c <_exit>
+ 228:	0c 94 35 03 	jmp	0x66a	; 0x66a <_exit>
 
 0000022c <__bad_interrupt>:
  22c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -218,7 +218,7 @@ Disassembly of section .text:
  24c:	78 e0       	ldi	r23, 0x08	; 8
  24e:	84 e0       	ldi	r24, 0x04	; 4
  250:	90 e2       	ldi	r25, 0x20	; 32
- 252:	0e 94 fe 02 	call	0x5fc	; 0x5fc <USART_InterruptDriver_Initialize>
+ 252:	0e 94 fd 02 	call	0x5fa	; 0x5fa <USART_InterruptDriver_Initialize>
  256:	e0 ea       	ldi	r30, 0xA0	; 160
  258:	f8 e0       	ldi	r31, 0x08	; 8
  25a:	83 e0       	ldi	r24, 0x03	; 3
@@ -250,7 +250,7 @@ Disassembly of section .text:
  28a:	7a e0       	ldi	r23, 0x0A	; 10
  28c:	84 e1       	ldi	r24, 0x14	; 20
  28e:	90 e2       	ldi	r25, 0x20	; 32
- 290:	0e 94 fe 02 	call	0x5fc	; 0x5fc <USART_InterruptDriver_Initialize>
+ 290:	0e 94 fd 02 	call	0x5fa	; 0x5fa <USART_InterruptDriver_Initialize>
  294:	e0 ea       	ldi	r30, 0xA0	; 160
  296:	fa e0       	ldi	r31, 0x0A	; 10
  298:	83 e0       	ldi	r24, 0x03	; 3
@@ -278,11 +278,11 @@ Disassembly of section .text:
  2c4:	61 e0       	ldi	r22, 0x01	; 1
  2c6:	80 e0       	ldi	r24, 0x00	; 0
  2c8:	98 e0       	ldi	r25, 0x08	; 8
- 2ca:	0e 94 f2 02 	call	0x5e4	; 0x5e4 <TC0_SetOverflowIntLevel>
+ 2ca:	0e 94 f1 02 	call	0x5e2	; 0x5e2 <TC0_SetOverflowIntLevel>
  2ce:	67 e0       	ldi	r22, 0x07	; 7
  2d0:	80 e0       	ldi	r24, 0x00	; 0
  2d2:	98 e0       	ldi	r25, 0x08	; 8
- 2d4:	0e 94 e6 02 	call	0x5cc	; 0x5cc <TC0_ConfigClockSource>
+ 2d4:	0e 94 e5 02 	call	0x5ca	; 0x5ca <TC0_ConfigClockSource>
  2d8:	08 95       	ret
 
 000002da <setTimer_Tally>:
@@ -293,11 +293,11 @@ Disassembly of section .text:
  2e6:	61 e0       	ldi	r22, 0x01	; 1
  2e8:	80 e4       	ldi	r24, 0x40	; 64
  2ea:	98 e0       	ldi	r25, 0x08	; 8
- 2ec:	0e 94 f8 02 	call	0x5f0	; 0x5f0 <TC1_SetOverflowIntLevel>
+ 2ec:	0e 94 f7 02 	call	0x5ee	; 0x5ee <TC1_SetOverflowIntLevel>
  2f0:	67 e0       	ldi	r22, 0x07	; 7
  2f2:	80 e4       	ldi	r24, 0x40	; 64
  2f4:	98 e0       	ldi	r25, 0x08	; 8
- 2f6:	0e 94 ec 02 	call	0x5d8	; 0x5d8 <TC1_ConfigClockSource>
+ 2f6:	0e 94 eb 02 	call	0x5d6	; 0x5d6 <TC1_ConfigClockSource>
  2fa:	08 95       	ret
 
 000002fc <sendStatus_RFM>:
@@ -420,7 +420,7 @@ ISR(USARTC0_RXC_vect)
 	USART_RXComplete(&USART_data_RFM);
  3ba:	84 e0       	ldi	r24, 0x04	; 4
  3bc:	90 e2       	ldi	r25, 0x20	; 32
- 3be:	0e 94 07 03 	call	0x60e	; 0x60e <USART_RXComplete>
+ 3be:	0e 94 06 03 	call	0x60c	; 0x60c <USART_RXComplete>
 }
  3c2:	ff 91       	pop	r31
  3c4:	ef 91       	pop	r30
@@ -479,7 +479,7 @@ ISR(USARTE0_RXC_vect)
 	USART_RXComplete(&USART_data_PC);
  424:	84 e1       	ldi	r24, 0x14	; 20
  426:	90 e2       	ldi	r25, 0x20	; 32
- 428:	0e 94 07 03 	call	0x60e	; 0x60e <USART_RXComplete>
+ 428:	0e 94 06 03 	call	0x60c	; 0x60c <USART_RXComplete>
 }
  42c:	ff 91       	pop	r31
  42e:	ef 91       	pop	r30
@@ -538,7 +538,7 @@ ISR(USARTC0_DRE_vect)
 	USART_DataRegEmpty(&USART_data_RFM);
  48e:	84 e0       	ldi	r24, 0x04	; 4
  490:	90 e2       	ldi	r25, 0x20	; 32
- 492:	0e 94 1c 03 	call	0x638	; 0x638 <USART_DataRegEmpty>
+ 492:	0e 94 1b 03 	call	0x636	; 0x636 <USART_DataRegEmpty>
 }
  496:	ff 91       	pop	r31
  498:	ef 91       	pop	r30
@@ -597,7 +597,7 @@ ISR(USARTE0_DRE_vect)
 	USART_DataRegEmpty(&USART_data_PC);
  4f8:	84 e1       	ldi	r24, 0x14	; 20
  4fa:	90 e2       	ldi	r25, 0x20	; 32
- 4fc:	0e 94 1c 03 	call	0x638	; 0x638 <USART_DataRegEmpty>
+ 4fc:	0e 94 1b 03 	call	0x636	; 0x636 <USART_DataRegEmpty>
 }
  500:	ff 91       	pop	r31
  502:	ef 91       	pop	r30
@@ -651,7 +651,7 @@ ISR(TCC1_OVF_vect) // TALLY
  552:	04 c0       	rjmp	.+8      	; 0x55c <__vector_20+0x2e>
  554:	20 91 03 20 	lds	r18, 0x2003	; 0x802003 <port_B>
  558:	92 17       	cp	r25, r18
- 55a:	d1 f0       	breq	.+52     	; 0x590 <__vector_20+0x62>
+ 55a:	c9 f0       	breq	.+50     	; 0x58e <__vector_20+0x60>
 	{
 		port_A = port_A_temp;
  55c:	80 93 13 20 	sts	0x2013, r24	; 0x802013 <port_A>
@@ -666,243 +666,242 @@ ISR(TCC1_OVF_vect) // TALLY
  570:	86 95       	lsr	r24
  572:	89 0f       	add	r24, r25
  574:	80 93 00 20 	sts	0x2000, r24	; 0x802000 <_edata>
-		CAM_READY = port_A >> 2;
+		CAM_READY = port_A & 0x3F;
  578:	80 91 13 20 	lds	r24, 0x2013	; 0x802013 <port_A>
- 57c:	86 95       	lsr	r24
- 57e:	86 95       	lsr	r24
- 580:	80 93 01 20 	sts	0x2001, r24	; 0x802001 <CAM_READY>
+ 57c:	8f 73       	andi	r24, 0x3F	; 63
+ 57e:	80 93 01 20 	sts	0x2001, r24	; 0x802001 <CAM_READY>
 
 		STATE = CHANGED; //Odoslanie dat pri zmene na portoch
- 584:	82 e0       	ldi	r24, 0x02	; 2
- 586:	80 93 02 20 	sts	0x2002, r24	; 0x802002 <STATE>
+ 582:	82 e0       	ldi	r24, 0x02	; 2
+ 584:	80 93 02 20 	sts	0x2002, r24	; 0x802002 <STATE>
 		TC_Restart(&TCC0);
- 58a:	88 e0       	ldi	r24, 0x08	; 8
- 58c:	80 93 09 08 	sts	0x0809, r24	; 0x800809 <__TEXT_REGION_LENGTH__+0x700809>
+ 588:	88 e0       	ldi	r24, 0x08	; 8
+ 58a:	80 93 09 08 	sts	0x0809, r24	; 0x800809 <__TEXT_REGION_LENGTH__+0x700809>
 	}
 }
- 590:	9f 91       	pop	r25
- 592:	8f 91       	pop	r24
- 594:	2f 91       	pop	r18
- 596:	0f 90       	pop	r0
- 598:	08 be       	out	0x38, r0	; 56
- 59a:	0f 90       	pop	r0
- 59c:	0f be       	out	0x3f, r0	; 63
- 59e:	0f 90       	pop	r0
- 5a0:	1f 90       	pop	r1
- 5a2:	18 95       	reti
+ 58e:	9f 91       	pop	r25
+ 590:	8f 91       	pop	r24
+ 592:	2f 91       	pop	r18
+ 594:	0f 90       	pop	r0
+ 596:	08 be       	out	0x38, r0	; 56
+ 598:	0f 90       	pop	r0
+ 59a:	0f be       	out	0x3f, r0	; 63
+ 59c:	0f 90       	pop	r0
+ 59e:	1f 90       	pop	r1
+ 5a0:	18 95       	reti
 
-000005a4 <__vector_14>:
+000005a2 <__vector_14>:
 
 ISR(TCC0_OVF_vect) // BEACON
 {
- 5a4:	1f 92       	push	r1
- 5a6:	0f 92       	push	r0
- 5a8:	0f b6       	in	r0, 0x3f	; 63
- 5aa:	0f 92       	push	r0
- 5ac:	11 24       	eor	r1, r1
- 5ae:	08 b6       	in	r0, 0x38	; 56
- 5b0:	0f 92       	push	r0
- 5b2:	18 be       	out	0x38, r1	; 56
- 5b4:	8f 93       	push	r24
+ 5a2:	1f 92       	push	r1
+ 5a4:	0f 92       	push	r0
+ 5a6:	0f b6       	in	r0, 0x3f	; 63
+ 5a8:	0f 92       	push	r0
+ 5aa:	11 24       	eor	r1, r1
+ 5ac:	08 b6       	in	r0, 0x38	; 56
+ 5ae:	0f 92       	push	r0
+ 5b0:	18 be       	out	0x38, r1	; 56
+ 5b2:	8f 93       	push	r24
 	STATE = 1; //Pravidelne zasielanie dat
- 5b6:	81 e0       	ldi	r24, 0x01	; 1
- 5b8:	80 93 02 20 	sts	0x2002, r24	; 0x802002 <STATE>
- 5bc:	8f 91       	pop	r24
- 5be:	0f 90       	pop	r0
- 5c0:	08 be       	out	0x38, r0	; 56
- 5c2:	0f 90       	pop	r0
- 5c4:	0f be       	out	0x3f, r0	; 63
- 5c6:	0f 90       	pop	r0
- 5c8:	1f 90       	pop	r1
- 5ca:	18 95       	reti
+ 5b4:	81 e0       	ldi	r24, 0x01	; 1
+ 5b6:	80 93 02 20 	sts	0x2002, r24	; 0x802002 <STATE>
+ 5ba:	8f 91       	pop	r24
+ 5bc:	0f 90       	pop	r0
+ 5be:	08 be       	out	0x38, r0	; 56
+ 5c0:	0f 90       	pop	r0
+ 5c2:	0f be       	out	0x3f, r0	; 63
+ 5c4:	0f 90       	pop	r0
+ 5c6:	1f 90       	pop	r1
+ 5c8:	18 95       	reti
 
-000005cc <TC0_ConfigClockSource>:
+000005ca <TC0_ConfigClockSource>:
 {
 	/* Make sure only CCxEN bits are set in disableMask. */
 	disableMask &= ( TC1_CCAEN_bm | TC1_CCBEN_bm );
 
 	/* Disable channels. */
 	tc->CTRLB &= ~disableMask;
- 5cc:	fc 01       	movw	r30, r24
- 5ce:	90 81       	ld	r25, Z
- 5d0:	90 7f       	andi	r25, 0xF0	; 240
- 5d2:	69 2b       	or	r22, r25
- 5d4:	60 83       	st	Z, r22
- 5d6:	08 95       	ret
+ 5ca:	fc 01       	movw	r30, r24
+ 5cc:	90 81       	ld	r25, Z
+ 5ce:	90 7f       	andi	r25, 0xF0	; 240
+ 5d0:	69 2b       	or	r22, r25
+ 5d2:	60 83       	st	Z, r22
+ 5d4:	08 95       	ret
 
-000005d8 <TC1_ConfigClockSource>:
- 5d8:	fc 01       	movw	r30, r24
- 5da:	90 81       	ld	r25, Z
- 5dc:	90 7f       	andi	r25, 0xF0	; 240
- 5de:	69 2b       	or	r22, r25
- 5e0:	60 83       	st	Z, r22
- 5e2:	08 95       	ret
+000005d6 <TC1_ConfigClockSource>:
+ 5d6:	fc 01       	movw	r30, r24
+ 5d8:	90 81       	ld	r25, Z
+ 5da:	90 7f       	andi	r25, 0xF0	; 240
+ 5dc:	69 2b       	or	r22, r25
+ 5de:	60 83       	st	Z, r22
+ 5e0:	08 95       	ret
 
-000005e4 <TC0_SetOverflowIntLevel>:
+000005e2 <TC0_SetOverflowIntLevel>:
  *
  *  \param tc               Timer/Counter module instance.
  *  \param intLevel         New overflow interrupt level.
  */
 void TC0_SetOverflowIntLevel( volatile TC0_t * tc, TC_OVFINTLVL_t intLevel )
 {
- 5e4:	fc 01       	movw	r30, r24
+ 5e2:	fc 01       	movw	r30, r24
 	tc->INTCTRLA = ( tc->INTCTRLA & ~TC0_OVFINTLVL_gm ) | intLevel;
- 5e6:	96 81       	ldd	r25, Z+6	; 0x06
- 5e8:	9c 7f       	andi	r25, 0xFC	; 252
- 5ea:	69 2b       	or	r22, r25
- 5ec:	66 83       	std	Z+6, r22	; 0x06
- 5ee:	08 95       	ret
+ 5e4:	96 81       	ldd	r25, Z+6	; 0x06
+ 5e6:	9c 7f       	andi	r25, 0xFC	; 252
+ 5e8:	69 2b       	or	r22, r25
+ 5ea:	66 83       	std	Z+6, r22	; 0x06
+ 5ec:	08 95       	ret
 
-000005f0 <TC1_SetOverflowIntLevel>:
+000005ee <TC1_SetOverflowIntLevel>:
  *
  *  \param tc               Timer/Counter module instance.
  *  \param intLevel         New overflow interrupt level.
  */
 void TC1_SetOverflowIntLevel( volatile TC1_t * tc, TC_OVFINTLVL_t intLevel )
 {
- 5f0:	fc 01       	movw	r30, r24
+ 5ee:	fc 01       	movw	r30, r24
 	tc->INTCTRLA = ( tc->INTCTRLA & ~TC1_OVFINTLVL_gm ) | intLevel;
- 5f2:	96 81       	ldd	r25, Z+6	; 0x06
- 5f4:	9c 7f       	andi	r25, 0xFC	; 252
- 5f6:	69 2b       	or	r22, r25
- 5f8:	66 83       	std	Z+6, r22	; 0x06
- 5fa:	08 95       	ret
+ 5f0:	96 81       	ldd	r25, Z+6	; 0x06
+ 5f2:	9c 7f       	andi	r25, 0xFC	; 252
+ 5f4:	69 2b       	or	r22, r25
+ 5f6:	66 83       	std	Z+6, r22	; 0x06
+ 5f8:	08 95       	ret
 
-000005fc <USART_InterruptDriver_Initialize>:
+000005fa <USART_InterruptDriver_Initialize>:
 
 	/* Advance buffer tail. */
 	bufPtr->RX_Tail = (bufPtr->RX_Tail + 1) & USART_RX_BUFFER_MASK;
 
 	return ans;
 }
- 5fc:	fc 01       	movw	r30, r24
- 5fe:	60 83       	st	Z, r22
- 600:	71 83       	std	Z+1, r23	; 0x01
- 602:	42 83       	std	Z+2, r20	; 0x02
- 604:	14 86       	std	Z+12, r1	; 0x0c
- 606:	13 86       	std	Z+11, r1	; 0x0b
- 608:	16 86       	std	Z+14, r1	; 0x0e
- 60a:	15 86       	std	Z+13, r1	; 0x0d
- 60c:	08 95       	ret
+ 5fa:	fc 01       	movw	r30, r24
+ 5fc:	60 83       	st	Z, r22
+ 5fe:	71 83       	std	Z+1, r23	; 0x01
+ 600:	42 83       	std	Z+2, r20	; 0x02
+ 602:	14 86       	std	Z+12, r1	; 0x0c
+ 604:	13 86       	std	Z+11, r1	; 0x0b
+ 606:	16 86       	std	Z+14, r1	; 0x0e
+ 608:	15 86       	std	Z+13, r1	; 0x0d
+ 60a:	08 95       	ret
 
-0000060e <USART_RXComplete>:
+0000060c <USART_RXComplete>:
  *  Stores received data in RX software buffer.
  *
  *  \param usart_data      The USART_data_t struct instance.
  */
 bool USART_RXComplete(USART_data_t * usart_data)
 {
- 60e:	fc 01       	movw	r30, r24
+ 60c:	fc 01       	movw	r30, r24
 	USART_Buffer_t * bufPtr;
 	bool ans;
 
 	bufPtr = &usart_data->buffer;
 	/* Advance buffer head. */
 	uint8_t tempRX_Head = (bufPtr->RX_Head + 1) & USART_RX_BUFFER_MASK;
- 610:	93 85       	ldd	r25, Z+11	; 0x0b
- 612:	9f 5f       	subi	r25, 0xFF	; 255
- 614:	93 70       	andi	r25, 0x03	; 3
+ 60e:	93 85       	ldd	r25, Z+11	; 0x0b
+ 610:	9f 5f       	subi	r25, 0xFF	; 255
+ 612:	93 70       	andi	r25, 0x03	; 3
 
 	/* Check for overflow. */
 	uint8_t tempRX_Tail = bufPtr->RX_Tail;
- 616:	84 85       	ldd	r24, Z+12	; 0x0c
+ 614:	84 85       	ldd	r24, Z+12	; 0x0c
 	uint8_t data = usart_data->usart->DATA;
- 618:	a0 81       	ld	r26, Z
- 61a:	b1 81       	ldd	r27, Z+1	; 0x01
- 61c:	2c 91       	ld	r18, X
+ 616:	a0 81       	ld	r26, Z
+ 618:	b1 81       	ldd	r27, Z+1	; 0x01
+ 61a:	2c 91       	ld	r18, X
 
 	if (tempRX_Head == tempRX_Tail) {
- 61e:	98 17       	cp	r25, r24
- 620:	49 f0       	breq	.+18     	; 0x634 <USART_RXComplete+0x26>
+ 61c:	98 17       	cp	r25, r24
+ 61e:	49 f0       	breq	.+18     	; 0x632 <USART_RXComplete+0x26>
 	  	ans = false;
 	}else{
 		ans = true;
 		usart_data->buffer.RX[usart_data->buffer.RX_Head] = data;
- 622:	83 85       	ldd	r24, Z+11	; 0x0b
- 624:	df 01       	movw	r26, r30
- 626:	a8 0f       	add	r26, r24
- 628:	b1 1d       	adc	r27, r1
- 62a:	13 96       	adiw	r26, 0x03	; 3
- 62c:	2c 93       	st	X, r18
+ 620:	83 85       	ldd	r24, Z+11	; 0x0b
+ 622:	df 01       	movw	r26, r30
+ 624:	a8 0f       	add	r26, r24
+ 626:	b1 1d       	adc	r27, r1
+ 628:	13 96       	adiw	r26, 0x03	; 3
+ 62a:	2c 93       	st	X, r18
 		usart_data->buffer.RX_Head = tempRX_Head;
- 62e:	93 87       	std	Z+11, r25	; 0x0b
+ 62c:	93 87       	std	Z+11, r25	; 0x0b
 	uint8_t data = usart_data->usart->DATA;
 
 	if (tempRX_Head == tempRX_Tail) {
 	  	ans = false;
 	}else{
 		ans = true;
- 630:	81 e0       	ldi	r24, 0x01	; 1
- 632:	08 95       	ret
+ 62e:	81 e0       	ldi	r24, 0x01	; 1
+ 630:	08 95       	ret
 	/* Check for overflow. */
 	uint8_t tempRX_Tail = bufPtr->RX_Tail;
 	uint8_t data = usart_data->usart->DATA;
 
 	if (tempRX_Head == tempRX_Tail) {
 	  	ans = false;
- 634:	80 e0       	ldi	r24, 0x00	; 0
+ 632:	80 e0       	ldi	r24, 0x00	; 0
 		ans = true;
 		usart_data->buffer.RX[usart_data->buffer.RX_Head] = data;
 		usart_data->buffer.RX_Head = tempRX_Head;
 	}
 	return ans;
 }
- 636:	08 95       	ret
+ 634:	08 95       	ret
 
-00000638 <USART_DataRegEmpty>:
+00000636 <USART_DataRegEmpty>:
  *  is empty. Argument is pointer to USART (USART_data_t).
  *
  *  \param usart_data      The USART_data_t struct instance.
  */
 void USART_DataRegEmpty(USART_data_t * usart_data)
 {
- 638:	fc 01       	movw	r30, r24
+ 636:	fc 01       	movw	r30, r24
 	USART_Buffer_t * bufPtr;
 	bufPtr = &usart_data->buffer;
 
 	/* Check if all data is transmitted. */
 	uint8_t tempTX_Tail = usart_data->buffer.TX_Tail;
- 63a:	96 85       	ldd	r25, Z+14	; 0x0e
+ 638:	96 85       	ldd	r25, Z+14	; 0x0e
 	if (bufPtr->TX_Head == tempTX_Tail){
- 63c:	85 85       	ldd	r24, Z+13	; 0x0d
- 63e:	98 13       	cpse	r25, r24
- 640:	07 c0       	rjmp	.+14     	; 0x650 <USART_DataRegEmpty+0x18>
+ 63a:	85 85       	ldd	r24, Z+13	; 0x0d
+ 63c:	98 13       	cpse	r25, r24
+ 63e:	07 c0       	rjmp	.+14     	; 0x64e <USART_DataRegEmpty+0x18>
 	    /* Disable DRE interrupts. */
 		uint8_t tempCTRLA = usart_data->usart->CTRLA;
- 642:	01 90       	ld	r0, Z+
- 644:	f0 81       	ld	r31, Z
- 646:	e0 2d       	mov	r30, r0
- 648:	83 81       	ldd	r24, Z+3	; 0x03
+ 640:	01 90       	ld	r0, Z+
+ 642:	f0 81       	ld	r31, Z
+ 644:	e0 2d       	mov	r30, r0
+ 646:	83 81       	ldd	r24, Z+3	; 0x03
 		tempCTRLA = (tempCTRLA & ~USART_DREINTLVL_gm) | USART_DREINTLVL_OFF_gc;
- 64a:	8c 7f       	andi	r24, 0xFC	; 252
+ 648:	8c 7f       	andi	r24, 0xFC	; 252
 		usart_data->usart->CTRLA = tempCTRLA;
- 64c:	83 83       	std	Z+3, r24	; 0x03
- 64e:	08 95       	ret
+ 64a:	83 83       	std	Z+3, r24	; 0x03
+ 64c:	08 95       	ret
 
 	}else{
 		/* Start transmitting. */
 		uint8_t data = bufPtr->TX[usart_data->buffer.TX_Tail];
- 650:	86 85       	ldd	r24, Z+14	; 0x0e
- 652:	df 01       	movw	r26, r30
- 654:	a8 0f       	add	r26, r24
- 656:	b1 1d       	adc	r27, r1
- 658:	17 96       	adiw	r26, 0x07	; 7
- 65a:	8c 91       	ld	r24, X
+ 64e:	86 85       	ldd	r24, Z+14	; 0x0e
+ 650:	df 01       	movw	r26, r30
+ 652:	a8 0f       	add	r26, r24
+ 654:	b1 1d       	adc	r27, r1
+ 656:	17 96       	adiw	r26, 0x07	; 7
+ 658:	8c 91       	ld	r24, X
 		usart_data->usart->DATA = data;
- 65c:	a0 81       	ld	r26, Z
- 65e:	b1 81       	ldd	r27, Z+1	; 0x01
- 660:	8c 93       	st	X, r24
+ 65a:	a0 81       	ld	r26, Z
+ 65c:	b1 81       	ldd	r27, Z+1	; 0x01
+ 65e:	8c 93       	st	X, r24
 
 		/* Advance buffer tail. */
 		bufPtr->TX_Tail = (bufPtr->TX_Tail + 1) & USART_TX_BUFFER_MASK;
- 662:	86 85       	ldd	r24, Z+14	; 0x0e
- 664:	8f 5f       	subi	r24, 0xFF	; 255
- 666:	83 70       	andi	r24, 0x03	; 3
- 668:	86 87       	std	Z+14, r24	; 0x0e
- 66a:	08 95       	ret
+ 660:	86 85       	ldd	r24, Z+14	; 0x0e
+ 662:	8f 5f       	subi	r24, 0xFF	; 255
+ 664:	83 70       	andi	r24, 0x03	; 3
+ 666:	86 87       	std	Z+14, r24	; 0x0e
+ 668:	08 95       	ret
 
-0000066c <_exit>:
- 66c:	f8 94       	cli
+0000066a <_exit>:
+ 66a:	f8 94       	cli
 
-0000066e <__stop_program>:
- 66e:	ff cf       	rjmp	.-2      	; 0x66e <__stop_program>
+0000066c <__stop_program>:
+ 66c:	ff cf       	rjmp	.-2      	; 0x66c <__stop_program>

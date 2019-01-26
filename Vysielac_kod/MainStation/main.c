@@ -294,7 +294,7 @@ ISR(TCC1_OVF_vect) // TALLY
 		port_B = port_B_temp;
 
 		CAM_LIVE = ((port_A & 0xC0) >> 2) + port_B;
-		CAM_READY = port_A >> 2;
+		CAM_READY = port_A & 0x3F;
 
 		STATE = CHANGED; //Odoslanie dat pri zmene na portoch
 		TC_Restart(&TCC0);

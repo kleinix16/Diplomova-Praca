@@ -312,12 +312,17 @@ for(int j = 0; j < 8; j++)
 //Metoda vysviecujuca velke Tally cisla - 42 x 64
 void printTallyNumber(int camera, int X, int Y)
 {
+	int cam_print = camera;
+	if(camera > 6)
+	{
+		cam_print = 7;
+	}
 	for (int j = 0; j < 8; j++)
 	{
 		setXY(X, Y);
 		for (int i = 0; i < wightTallyFont; i++)
 		{
-			SendChar(pgm_read_byte(tallyNumbers[camera] + (i + j * wightTallyFont)));
+			SendChar(pgm_read_byte(tallyNumbers[cam_print] + (i + j * wightTallyFont)));
 		}
 		X++;
 	}

@@ -22,11 +22,14 @@
 
 
 char RX_buffer[USART_BUFFER];
-int RX_index = 0;
+uint8_t RX_index = 0;
 
 bool system_error = false;
 bool new_msg = false;
 bool watchdog = false;
+
+volatile uint8_t CAM_READY = 10; // Cislo kamery v pripravnom rezime
+volatile uint8_t CAM_LIVE  = 10;  // Cislo kamery v ostrom vyslieani
 
 uint16_t timerx;
 
@@ -107,6 +110,16 @@ void setup_T0_WD()
 	TIMSK0 |= (1 << OCIE0A); //lokalme povolenie prerusenia
 }
 
+void setup_Display(void)
+{
+	I2C_Init();
+	
+	_delay_ms(10);
+	InitializeDisplay();
+	
+	clear_display();
+}
+
 void setup_USART(void)
 {
 	//Nastavovanie AUX portu ako vstup 
@@ -155,61 +168,85 @@ uint8_t USART_receive(void)
 	return a;
 }
 
+
+void parseCameraStatus()
+{
+	// Ako prve skontrolujem stav tejto kamery - LIVE rezim
+	if (!(RX_buffer[1] & CAMERA_MASK)){
+		CAM_LIVE = CAMERA;
+	}else if (!(RX_buffer[1] & 0x01)) {
+		CAM_LIVE = 1;
+	}else if (!(RX_buffer[1] & 0x02)) {
+		CAM_LIVE = 2;	
+	}else if (!(RX_buffer[1] & 0x04)) {
+		CAM_LIVE = 3;
+	}else if (!(RX_buffer[1] & 0x08)) {
+		CAM_LIVE = 4;
+	}else if (!(RX_buffer[1] & 0x10)) {
+		CAM_LIVE = 5;
+	}else if (!(RX_buffer[1] & 0x20)) {
+		CAM_LIVE = 6;
+	}else {
+		CAM_LIVE = 0;
+	}
+
+	// Ako prve skontrolujem stav tejto kamery - READY rezim
+	if (!(RX_buffer[2] & CAMERA_MASK)){
+		CAM_READY = CAMERA;
+	}else if (!(RX_buffer[2] & 0x01)) {
+		CAM_READY = 1;
+	}else if (!(RX_buffer[2] & 0x02)) {
+		CAM_READY = 2;	
+	}else if (!(RX_buffer[2] & 0x04)) {
+		CAM_READY = 3;
+	}else if (!(RX_buffer[2] & 0x08)) {
+		CAM_READY = 4;
+	}else if (!(RX_buffer[2] & 0x10)) {
+		CAM_READY = 5;
+	}else if (!(RX_buffer[2] & 0x20)) {
+		CAM_READY = 6;
+	}else {
+		CAM_READY = 0;
+	}
+}
+
 void refresh_LED()
 {
 	//Kontrola, ci je kamera LIVE
-	if (RX_buffer[1] & CAMERA_MASK)			//Aplikovanie masky pre zistenie stavu kamerz
+	if (CAM_LIVE == CAMERA)			//Aplikovanie masky pre zistenie stavu kamerz
 	{
-		cbi(LED_PORT, R_LED);					//Rozsvietenie cervenej LED
+		sbi(LED_PORT, R_LED);					//Rozsvietenie cervenej LED
 	}
 	else
 	{
-		sbi(LED_PORT, R_LED);					//Zhsnutie cervenej LED
+		cbi(LED_PORT, R_LED);					//Zhsnutie cervenej LED
 		
 		//Kontrola, ci je kamera READY
-		if (RX_buffer[2] & CAMERA_MASK)
+		if (CAM_READY == CAMERA)
 		{
-			cbi(LED_PORT, G_LED);				//Rozsvietenie zelenej
+			sbi(LED_PORT, G_LED);				//Rozsvietenie zelenej
 		}
 		else
 		{
-			sbi(LED_PORT, G_LED);				//Zhasnutie zelenej
+			cbi(LED_PORT, G_LED);				//Zhasnutie zelenej
 		}
 	}
-
-	
 }
+
+
+void statusDisplay()
+{
+	printTallyNumber(CAM_LIVE,0,0); //Velke cislo pre kameru, ktora je von
+	printBigNumber(CAM_READY,0,6);  //mensie cislo pre kameru, ktora je von	
+}
+
 
 int main(void)
 {
-	
-	I2C_Init();
-	
-	_delay_ms(10);
-	InitializeDisplay();
-	
-	clear_display();
-	
-	
-	//setup()
-	
-	int j = 0;
-	while(1)
-	{
-		for (uint8_t i = 0; i<8; i++)
-		{
-			//clear_display();
-			printTallyNumber(i,0,0);
-			_delay_ms(100);
-		}
-		printBigNumber(j, 0, 13);
-		j++;
-		
-	}
-}
+	setup_Display();
 
-int main2(void)
-{
+	statusDisplay();
+	
 	setup_LED();
 	setup_USART();
 	setup_T0_WD();
@@ -230,6 +267,8 @@ int main2(void)
 					case REFRESH:
 					
 					case CHANGED:
+							parseCameraStatus();
+							statusDisplay();
 							refresh_LED();		//Nastavenie LED podla prijatych dat
 							break;
 
