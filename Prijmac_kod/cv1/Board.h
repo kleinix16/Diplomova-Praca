@@ -18,10 +18,12 @@
 
 
 //***********MESS STATUS****
-#define REFRESH  0x62	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
-#define CHANGED  0x73	//Sprava generovana pri zmene kamier
-#define MESSAGE  0x64	//Sprava od rezisera
-#define RESPONSE 0x66	//Odpoved kameramanov
+#define REFRESH			0x62	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
+#define CHANGED			0x73	//Sprava generovana pri zmene kamier
+#define MESSAGE_BASIC	0x64	//Sprava od rezisera - predpripravena
+#define MESSAGE_ADVANCE 0x65	//Sprava od rezisera - napisana
+#define RESPONSE		0x66	//Odpoved kameramanov
+#define ERROR			0xFF	//Chybna sprava
 
 
 
@@ -51,7 +53,7 @@
 #define USART_TX PORTD1
 #define USART_RX PORTD0
 
-#define USART_BUFFER 10
+#define USART_BUFFER 120
 #define USART_END_CHAR 0x61
 
 #define BAUDERATE 9600   

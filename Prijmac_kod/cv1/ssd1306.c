@@ -18,7 +18,7 @@
 #include "I2C.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
-#include "data.h"
+#include "dispalyData.h"
 #include "ssd1306.h"
 
 uint8_t _i2c_address = 0x78; //display write address
@@ -279,36 +279,7 @@ void sendStrXY(char *string, int X, int Y)
 	}
 }
 
-void tomas()
-{
 
-	//pokus o boot_logo
-	/*
-	int i,j;
-	for (j=;j<8;j++)
-	{
-		setXY(j,0);
-		for (i=0;i<128;i++)
-		SendChar(pgm_read_byte(boot_logo[j]+i));
-	
-	}*/
-
-	int X = 0;
-	int Y = 0;
-
-	
-for(int j = 0; j < 8; j++)
-{
-	setXY(X, Y);
-	for (int i = 0; i < 42; i++)
-	{
-		SendChar(pgm_read_byte(tallyNumbers[7] + (i+j*42)));
-	}
-	X++;
-}
-
-	
-}
 //Metoda vysviecujuca velke Tally cisla - 42 x 64
 void printTallyNumber(int camera, int X, int Y)
 {
@@ -326,4 +297,15 @@ void printTallyNumber(int camera, int X, int Y)
 		}
 		X++;
 	}
+}
+
+void sendCharTOMAS(unsigned char data)
+{
+	I2C_Start(_i2c_address); // begin transmitting
+	I2C_Write(0x40);		 //data mode
+
+	for (int i = 0; i < 8; i++)
+		I2C_Write(pgm_read_byte(myFont[data - 0x20] + i));
+
+	I2C_Stop(); // stop transmitting
 }

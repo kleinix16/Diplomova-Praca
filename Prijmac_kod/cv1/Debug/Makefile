@@ -39,6 +39,7 @@ SUBDIRS :=
 C_SRCS +=  \
 ../I2C.c \
 ../main.c \
+../printMessenge.c \
 ../ssd1306.c
 
 
@@ -51,21 +52,25 @@ ASM_SRCS +=
 OBJS +=  \
 I2C.o \
 main.o \
+printMessenge.o \
 ssd1306.o
 
 OBJS_AS_ARGS +=  \
 I2C.o \
 main.o \
+printMessenge.o \
 ssd1306.o
 
 C_DEPS +=  \
 I2C.d \
 main.d \
+printMessenge.d \
 ssd1306.d
 
 C_DEPS_AS_ARGS +=  \
 I2C.d \
 main.d \
+printMessenge.d \
 ssd1306.d
 
 OUTPUT_FILE_PATH +=cv1.elf
@@ -82,6 +87,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

@@ -9,7 +9,7 @@
 #ifndef SSD1306_H_
 #define SSD1306_H_
 
-
+#include <stdint.h>
 
 #define SSD1306_LCDWIDTH      128
 #define SSD1306_LCDHEIGHT      64
@@ -57,8 +57,7 @@ void bmp(bitmap_t b);
 void setPageAddress();
 void setColAddress();
 
-void tomas();
-
 void printTallyNumber(int camera, int X, int Y);
+void sendCharTOMAS(unsigned char data);
 
 #endif /* SSD1306_H_ */

@@ -17,6 +17,7 @@
 
 #include <avr/pgmspace.h>
 #include "ssd1306.h"
+#include "printMessenge.h"
 
 #include <stdbool.h>
 
@@ -61,22 +62,6 @@ void initDisplayBuffer(){
 	memset(display_buffer, 0X04, 1024); // tried other values
 }
 
-void test()
-{
-	// Initialze SSD1306 OLED display
-	reset_display(); // Clear screen
-	setXY(0, 0);	 // Set cursor position, start of line 0
-	sendStr(" Klein Tomas");
-	setXY(1, 1); // Set cursor position, start of line 1
-	sendStr("Mlein Tomas");
-	setXY(2, 0); // Set cursor position, start of line 2
-	sendStr("Klein Tomas");
-	setXY(2, 10); // Set cursor position, line 2 10th character
-	sendStr("CA");
-	setXY(3, 10); // Set cursor position, line 2 10th character
-	sendStr("TEST");
-}
-
 void setup_LED(void)
 {
 	sbi(LED_DDR, G_LED);	//Nastavenie pinu ako vystup
@@ -89,6 +74,9 @@ void setup_LED(void)
 	
 	sbi(DDRB, B_LED);   //Modra an testovacej doske
 	cbi(PORTB, B_LED);
+	
+	
+	
 }
 
 void setup_BUTTON(void)
@@ -146,8 +134,6 @@ void setup_USART(void)
 
 }
 
-//ToDo - vytvor funkciu na poslanie stringu
-
 uint8_t USART_send(uint8_t a)
 {
 	while (!(UCSR0A & (1 << UDRE0)))
@@ -167,7 +153,6 @@ uint8_t USART_receive(void)
 	//USART_send(a);  //echo
 	return a;
 }
-
 
 void parseCameraStatus()
 {
@@ -233,13 +218,50 @@ void refresh_LED()
 	}
 }
 
-
 void statusDisplay()
 {
+	clear_display();
 	printTallyNumber(CAM_LIVE,0,0); //Velke cislo pre kameru, ktora je von
 	printBigNumber(CAM_READY,0,6);  //mensie cislo pre kameru, ktora je von	
 }
 
+
+void printPrepairedMessage()
+{
+	messCamera(0);
+}
+
+void printRecievedMessage()
+{
+	displayOff();
+	clear_display();
+	
+	uint8_t indexMess = 1;
+	uint8_t posX = 0;
+	
+	setXY(posX,0);
+	while(RX_buffer[indexMess] != USART_END_CHAR)
+	{
+		if((indexMess-1)%15 == 0)
+		{
+			posX++;
+			setXY(posX,0);
+		}
+		
+		sendCharTOMAS(RX_buffer[indexMess]);
+		
+		indexMess++;
+	}
+	
+	displayOn();
+}
+
+void sendReportAboutError()
+{
+	 USART_send(ERROR);				//
+	 USART_send(CAMERA);			//
+	 USART_send(USART_END_CHAR);	//	
+}
 
 int main(void)
 {
@@ -272,19 +294,22 @@ int main(void)
 							refresh_LED();		//Nastavenie LED podla prijatych dat
 							break;
 
-					//Sprava s informaciou od rezie
-					case MESSAGE:
-							USART_send('M');
+					//Sprava s informaciou od rezie - predpripravena
+					case MESSAGE_BASIC:
+							printPrepairedMessage();
 							break;
 							
-					//Sprava s informaciou od rezie
-					case RESPONSE:
-							USART_send('R');
+					//Sprava s informaciou od rezie - pisana	
+					case MESSAGE_ADVANCE:
+							printRecievedMessage();
 							break;
-
-						//ToDo - pripad, co ak prijata sprava  zacina zle...
+							
+					//Sprava s informaciou do rezie od kameramanov
+					case RESPONSE:
+							break;
+					
 					default:
-							USART_send(RX_buffer[0]);
+							sendReportAboutError();
 							break;
 				}
 				new_msg = false;					//Nulovanie priznaku novej spravy
@@ -295,9 +320,11 @@ int main(void)
 			//ToDo - pekny efekt by bol, keby sa zoslabovala
 			cbi(LED_PORT,R_LED); 
 			cbi(LED_PORT,G_LED);
-			
+		
+		
 			tbi(PORTB, B_LED);
 			_delay_ms(WATCHDOG_ERROR);
+			
 		}
 
 		if (system_error == true)		//V pripade neocakavaneho stavu zariadenia sa vyhlasi chynby stav bez moznosti navratu - nutny restart

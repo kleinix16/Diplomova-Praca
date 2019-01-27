@@ -151,7 +151,7 @@
     <Compile Include="Board.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="data.h">
+    <Compile Include="dispalyData.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="I2C.c">
@@ -161,6 +161,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="printMessenge.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="printMessenge.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="ssd1306.c">
