@@ -9,9 +9,10 @@ Allocating common symbols
 Common symbol       size              file
 
 port_B              0x1               main.o
-USART_data_RFM      0xf               main.o
+USART_data_RFM      0x107             main.o
 port_A              0x1               main.o
-USART_data_PC       0xf               main.o
+USART_data_PC       0x107             main.o
+USART_data_BLT      0x107             main.o
 
 Discarded input sections
 
@@ -22,9 +23,15 @@ Discarded input sections
  .bss           0x00000000        0x0 main.o
  .text.setTally_CONN
                 0x00000000       0x2c main.o
- .text.sendChar
+ .text.setUp_PC_USART
+                0x00000000       0x3e main.o
+ .text.sendStatus_BLT
+                0x00000000       0x48 main.o
+ .text.sendCharRFM
                 0x00000000       0x10 main.o
- .text.sendString
+ .text.sendCharPC
+                0x00000000       0x10 main.o
+ .text.sendStringRFM
                 0x00000000       0x1e main.o
  .text          0x00000000        0x0 port_driver.o
  .data          0x00000000        0x0 port_driver.o
@@ -33,8 +40,6 @@ Discarded input sections
                 0x00000000        0xe port_driver.o
  .text.PORT_ConfigureInterrupt1
                 0x00000000        0xe port_driver.o
- .text.PORT_ConfigurePins
-                0x00000000       0x32 port_driver.o
  .text.PORT_MapVirtualPort0
                 0x00000000        0xe port_driver.o
  .text.PORT_MapVirtualPort1
@@ -43,16 +48,6 @@ Discarded input sections
                 0x00000000        0xe port_driver.o
  .text.PORT_MapVirtualPort3
                 0x00000000        0xe port_driver.o
- .debug_info    0x00000000      0x7f7 port_driver.o
- .debug_abbrev  0x00000000      0x134 port_driver.o
- .debug_loc     0x00000000      0x1ef port_driver.o
- .debug_aranges
-                0x00000000       0x50 port_driver.o
- .debug_ranges  0x00000000       0x40 port_driver.o
- .debug_line    0x00000000      0x1f8 port_driver.o
- .debug_str     0x00000000      0xf73 port_driver.o
- .comment       0x00000000       0x31 port_driver.o
- .debug_frame   0x00000000       0x90 port_driver.o
  .text          0x00000000        0x0 TC_driver.o
  .data          0x00000000        0x0 TC_driver.o
  .bss           0x00000000        0x0 TC_driver.o
@@ -98,13 +93,11 @@ Discarded input sections
  .text.USART_InterruptDriver_DreInterruptLevel_Set
                 0x00000000        0x6 usart_driver.o
  .text.USART_TXBuffer_FreeSpace
-                0x00000000       0x14 usart_driver.o
+                0x00000000       0x1a usart_driver.o
  .text.USART_TXBuffer_PutByte
-                0x00000000       0x38 usart_driver.o
- .text.USART_RXBufferData_Available
-                0x00000000       0x10 usart_driver.o
- .text.USART_RXBuffer_GetByte
-                0x00000000       0x18 usart_driver.o
+                0x00000000       0x42 usart_driver.o
+ .text.USART_DataRegEmpty
+                0x00000000       0x4c usart_driver.o
  .text.USART_NineBits_PutChar
                 0x00000000       0x18 usart_driver.o
  .text.USART_NineBits_GetChar
@@ -268,7 +261,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x66e
+.text           0x00000000      0x6c6
  *(.vectors)
  .vectors       0x00000000      0x1fc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
                 0x00000000                __vector_default
@@ -329,7 +322,6 @@ END GROUP
                 0x0000022c                __vector_104
                 0x0000022c                __vector_22
                 0x0000022c                __vector_63
-                0x0000022c                __vector_28
                 0x0000022c                __vector_67
                 0x0000022c                __vector_1
                 0x0000022c                __vector_119
@@ -428,6 +420,7 @@ END GROUP
                 0x0000022c                __vector_94
                 0x0000022c                __vector_126
                 0x0000022c                __vector_8
+                0x0000022c                __vector_26
                 0x0000022c                __vector_48
                 0x0000022c                __vector_124
                 0x0000022c                __vector_116
@@ -440,6 +433,7 @@ END GROUP
                 0x0000022c                __vector_10
                 0x0000022c                __vector_50
                 0x0000022c                __vector_16
+                0x0000022c                __vector_59
                 0x0000022c                __vector_18
                 0x0000022c                __vector_97
                 0x0000022c                __vector_42
@@ -451,64 +445,70 @@ END GROUP
  .text.setUp_RFM_USART
                 0x00000230       0x4a main.o
                 0x00000230                setUp_RFM_USART
- .text.setUp_PC_USART
-                0x0000027a       0x3e main.o
-                0x0000027a                setUp_PC_USART
+ .text.setUp_BLT_USART
+                0x0000027a       0x5a main.o
+                0x0000027a                setUp_BLT_USART
  .text.setTimer_Beacon
-                0x000002b8       0x22 main.o
-                0x000002b8                setTimer_Beacon
+                0x000002d4       0x22 main.o
+                0x000002d4                setTimer_Beacon
  .text.setTimer_Tally
-                0x000002da       0x22 main.o
-                0x000002da                setTimer_Tally
+                0x000002f6       0x22 main.o
+                0x000002f6                setTimer_Tally
  .text.sendStatus_RFM
-                0x000002fc       0x4c main.o
-                0x000002fc                sendStatus_RFM
- .text.main     0x00000348       0x3e main.o
-                0x00000348                main
+                0x00000318       0x48 main.o
+                0x00000318                sendStatus_RFM
+ .text.sendCharBLT
+                0x00000360       0x10 main.o
+                0x00000360                sendCharBLT
+ .text.main     0x00000370       0x42 main.o
+                0x00000370                main
  .text.__vector_25
-                0x00000386       0x6a main.o
-                0x00000386                __vector_25
+                0x000003b2       0x84 main.o
+                0x000003b2                __vector_25
  .text.__vector_58
-                0x000003f0       0x6a main.o
-                0x000003f0                __vector_58
- .text.__vector_26
-                0x0000045a       0x6a main.o
-                0x0000045a                __vector_26
- .text.__vector_59
-                0x000004c4       0x6a main.o
-                0x000004c4                __vector_59
+                0x00000436       0x6a main.o
+                0x00000436                __vector_58
+ .text.__vector_28
+                0x000004a0       0x9e main.o
+                0x000004a0                __vector_28
  .text.__vector_20
-                0x0000052e       0x74 main.o
-                0x0000052e                __vector_20
+                0x0000053e       0x74 main.o
+                0x0000053e                __vector_20
  .text.__vector_14
-                0x000005a2       0x28 main.o
-                0x000005a2                __vector_14
+                0x000005b2       0x28 main.o
+                0x000005b2                __vector_14
+ .text.PORT_ConfigurePins
+                0x000005da       0x32 port_driver.o
+                0x000005da                PORT_ConfigurePins
  .text.TC0_ConfigClockSource
-                0x000005ca        0xc TC_driver.o
-                0x000005ca                TC0_ConfigClockSource
+                0x0000060c        0xc TC_driver.o
+                0x0000060c                TC0_ConfigClockSource
  .text.TC1_ConfigClockSource
-                0x000005d6        0xc TC_driver.o
-                0x000005d6                TC1_ConfigClockSource
+                0x00000618        0xc TC_driver.o
+                0x00000618                TC1_ConfigClockSource
  .text.TC0_SetOverflowIntLevel
-                0x000005e2        0xc TC_driver.o
-                0x000005e2                TC0_SetOverflowIntLevel
+                0x00000624        0xc TC_driver.o
+                0x00000624                TC0_SetOverflowIntLevel
  .text.TC1_SetOverflowIntLevel
-                0x000005ee        0xc TC_driver.o
-                0x000005ee                TC1_SetOverflowIntLevel
+                0x00000630        0xc TC_driver.o
+                0x00000630                TC1_SetOverflowIntLevel
  .text.USART_InterruptDriver_Initialize
-                0x000005fa       0x12 usart_driver.o
-                0x000005fa                USART_InterruptDriver_Initialize
+                0x0000063c       0x1c usart_driver.o
+                0x0000063c                USART_InterruptDriver_Initialize
+ .text.USART_RXBufferData_Available
+                0x00000658       0x16 usart_driver.o
+                0x00000658                USART_RXBufferData_Available
+ .text.USART_RXBuffer_GetByte
+                0x0000066e       0x1c usart_driver.o
+                0x0000066e                USART_RXBuffer_GetByte
  .text.USART_RXComplete
-                0x0000060c       0x2a usart_driver.o
-                0x0000060c                USART_RXComplete
- .text.USART_DataRegEmpty
-                0x00000636       0x34 usart_driver.o
-                0x00000636                USART_DataRegEmpty
-                0x0000066a                . = ALIGN (0x2)
+                0x0000068a       0x38 usart_driver.o
+                0x0000068a                USART_RXComplete
+                0x000006c2                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000066a        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
-                0x0000066a                _exit
-                0x0000066a                exit
+ .fini9         0x000006c2        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
+                0x000006c2                _exit
+                0x000006c2                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -527,11 +527,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000066a        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
+ .fini0         0x000006c2        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000066e                _etext = .
+                0x000006c6                _etext = .
 
-.data           0x00802000        0x0 load address 0x0000066e
+.data           0x00802000        0x0 load address 0x000006c6
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -543,7 +543,7 @@ END GROUP
                 0x00802000                _edata = .
                 [!provide]                PROVIDE (__data_end, .)
 
-.bss            0x00802000       0x23
+.bss            0x00802000      0x31a
                 0x00802000                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -555,20 +555,21 @@ END GROUP
  .bss.STATE     0x00802002        0x1 main.o
                 0x00802002                STATE
  *(COMMON)
- COMMON         0x00802003       0x20 main.o
+ COMMON         0x00802003      0x317 main.o
                 0x00802003                port_B
                 0x00802004                USART_data_RFM
-                0x00802013                port_A
-                0x00802014                USART_data_PC
-                0x00802023                PROVIDE (__bss_end, .)
-                0x0000066e                __data_load_start = LOADADDR (.data)
-                0x0000066e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0080210b                port_A
+                0x0080210c                USART_data_PC
+                0x00802213                USART_data_BLT
+                0x0080231a                PROVIDE (__bss_end, .)
+                0x000006c6                __data_load_start = LOADADDR (.data)
+                0x000006c6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00802023        0x0
+.noinit         0x0080231a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00802023                _end = .
+                0x0080231a                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -612,6 +613,7 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 main.o
                                  0x31 (size before relaxing)
+ .comment       0x00000030       0x31 port_driver.o
  .comment       0x00000030       0x31 TC_driver.o
  .comment       0x00000030       0x31 usart_driver.o
 
@@ -635,60 +637,69 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x1c0
+.debug_aranges  0x00000000      0x228
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x90 main.o
+                0x00000000       0xa8 main.o
  .debug_aranges
-                0x00000090       0xc8 TC_driver.o
+                0x000000a8       0x50 port_driver.o
  .debug_aranges
-                0x00000158       0x68 usart_driver.o
+                0x000000f8       0xc8 TC_driver.o
+ .debug_aranges
+                0x000001c0       0x68 usart_driver.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x572c
+.debug_info     0x00000000     0x607b
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x284f C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_info    0x0000284f     0x1622 main.o
- .debug_info    0x00003e71     0x1335 TC_driver.o
- .debug_info    0x000051a6      0x586 usart_driver.o
+ .debug_info    0x0000284f     0x1773 main.o
+ .debug_info    0x00003fc2      0x7f7 port_driver.o
+ .debug_info    0x000047b9     0x1335 TC_driver.o
+ .debug_info    0x00005aee      0x58d usart_driver.o
 
-.debug_abbrev   0x00000000     0x2ca2
+.debug_abbrev   0x00000000     0x2dd6
  *(.debug_abbrev)
  .debug_abbrev  0x00000000     0x262c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_abbrev  0x0000262c      0x2db main.o
- .debug_abbrev  0x00002907      0x187 TC_driver.o
- .debug_abbrev  0x00002a8e      0x214 usart_driver.o
+ .debug_abbrev  0x0000262c      0x2c1 main.o
+ .debug_abbrev  0x000028ed      0x134 port_driver.o
+ .debug_abbrev  0x00002a21      0x187 TC_driver.o
+ .debug_abbrev  0x00002ba8      0x22e usart_driver.o
 
-.debug_line     0x00000000      0xe22
+.debug_line     0x00000000     0x1147
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x3b5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_line    0x000003b5      0x48e main.o
- .debug_line    0x00000843      0x2f7 TC_driver.o
- .debug_line    0x00000b3a      0x2e8 usart_driver.o
+ .debug_line    0x000003b5      0x5b5 main.o
+ .debug_line    0x0000096a      0x1f8 port_driver.o
+ .debug_line    0x00000b62      0x2f7 TC_driver.o
+ .debug_line    0x00000e59      0x2ee usart_driver.o
 
-.debug_frame    0x00000000      0x4a0
+.debug_frame    0x00000000      0x538
  *(.debug_frame)
- .debug_frame   0x00000000      0x268 main.o
- .debug_frame   0x00000268      0x174 TC_driver.o
- .debug_frame   0x000003dc       0xc4 usart_driver.o
+ .debug_frame   0x00000000      0x264 main.o
+ .debug_frame   0x00000264       0x90 port_driver.o
+ .debug_frame   0x000002f4      0x174 TC_driver.o
+ .debug_frame   0x00000468       0xd0 usart_driver.o
 
-.debug_str      0x00000000     0x2f43
+.debug_str      0x00000000     0x3b4b
  *(.debug_str)
  .debug_str     0x00000000     0x1aa8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_str     0x00001aa8      0xd2d main.o
-                                0xd9e (size before relaxing)
- .debug_str     0x000027d5      0x5ee TC_driver.o
+ .debug_str     0x00001aa8      0xd8d main.o
+                                0xdfe (size before relaxing)
+ .debug_str     0x00002835      0xc1a port_driver.o
+                                0xf73 (size before relaxing)
+ .debug_str     0x0000344f      0x5e5 TC_driver.o
                                 0xccb (size before relaxing)
- .debug_str     0x00002dc3      0x180 usart_driver.o
-                                0x470 (size before relaxing)
+ .debug_str     0x00003a34      0x117 usart_driver.o
+                                0x46e (size before relaxing)
 
-.debug_loc      0x00000000      0xb63
+.debug_loc      0x00000000      0xd46
  *(.debug_loc)
- .debug_loc     0x00000000      0x486 main.o
- .debug_loc     0x00000486      0x336 TC_driver.o
- .debug_loc     0x000007bc      0x3a7 usart_driver.o
+ .debug_loc     0x00000000      0x404 main.o
+ .debug_loc     0x00000404      0x1ef port_driver.o
+ .debug_loc     0x000005f3      0x336 TC_driver.o
+ .debug_loc     0x00000929      0x41d usart_driver.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -708,11 +719,12 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x190
+.debug_ranges   0x00000000      0x1e8
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x80 main.o
- .debug_ranges  0x00000080       0xb8 TC_driver.o
- .debug_ranges  0x00000138       0x58 usart_driver.o
+ .debug_ranges  0x00000000       0x98 main.o
+ .debug_ranges  0x00000098       0x40 port_driver.o
+ .debug_ranges  0x000000d8       0xb8 TC_driver.o
+ .debug_ranges  0x00000190       0x58 usart_driver.o
 
 .debug_macro
  *(.debug_macro)

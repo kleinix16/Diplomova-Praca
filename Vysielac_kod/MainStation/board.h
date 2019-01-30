@@ -21,12 +21,10 @@
 #define tbi(x,y) x ^= _BV(y)    //change bit - using bitwise XOR operator
 
 
-//***********MESS STATUS****
+//***********SYSTEM STATUS****
 #define NORMAL   0x00
 #define REFRESH  0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
 #define CHANGED  0x02	//Sprava generovana pri zmene kamier
-#define MESSAGE  0x04	//Sprava od rezisera
-#define RESPONSE 0x08	//Odpoved kameramanov
 
 //***********TIMES****
 #define SYSTEM_REFRESH 20
@@ -37,6 +35,11 @@
 #define B_LED  PORTD1
 #define G_LED  PORTD2
 
+#define USART_END_CHAR 0x61
+
+#define USART_BLT USARTC1
+#define USART_PORT_BLT PORTC
+
 #define BLT_RX  PORTC7
 #define BLT_TX  PORTC6
 #define BLT_STATE  PORTC5
@@ -46,11 +49,11 @@
 
 #define USART_PC USARTE0
 #define USART_PORT_PC PORTE
+#define PC_RX  PORTE2
+#define PC_TX  PORTE3
 
-
-#define USART_END_CHAR 0x61
-#define USART_RFM USARTC0
-#define USART_PORT_RFM PORTC
+#define USART_LORA USARTC0
+#define USART_PORT_LORA PORTC
 
 #define LORA_RX  PORTC3
 #define LORA_TX  PORTC2

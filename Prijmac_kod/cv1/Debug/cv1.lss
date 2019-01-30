@@ -1625,11 +1625,11 @@ int main(void)
 
 	sei();			//Povoleni preruseni
     151c:	78 94       	sei
+			//ToDo - pekny efekt by bol, keby sa zoslabovala
 			cbi(LED_PORT,R_LED); 
 			cbi(LED_PORT,G_LED);
-			
-			_delay_ms(WATCHDOG_ERROR);
-			
+		
+		
 			tbi(PORTB, B_LED);
     151e:	12 e0       	ldi	r17, 0x02	; 2
 		{
@@ -1720,28 +1720,28 @@ int main(void)
     1574:	5e 98       	cbi	0x0b, 6	; 11
 			cbi(LED_PORT,G_LED);
     1576:	5b 98       	cbi	0x0b, 3	; 11
+		
+		
+			tbi(PORTB, B_LED);
+    1578:	85 b1       	in	r24, 0x05	; 5
+    157a:	81 27       	eor	r24, r17
+    157c:	85 b9       	out	0x05, r24	; 5
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-    1578:	2f e3       	ldi	r18, 0x3F	; 63
-    157a:	3e e7       	ldi	r19, 0x7E	; 126
-    157c:	85 e0       	ldi	r24, 0x05	; 5
-    157e:	21 50       	subi	r18, 0x01	; 1
-    1580:	30 40       	sbci	r19, 0x00	; 0
-    1582:	80 40       	sbci	r24, 0x00	; 0
-    1584:	e1 f7       	brne	.-8      	; 0x157e <main+0x76>
-    1586:	00 c0       	rjmp	.+0      	; 0x1588 <main+0x80>
-    1588:	00 00       	nop
-			
+    157e:	2f e3       	ldi	r18, 0x3F	; 63
+    1580:	3e e7       	ldi	r19, 0x7E	; 126
+    1582:	85 e0       	ldi	r24, 0x05	; 5
+    1584:	21 50       	subi	r18, 0x01	; 1
+    1586:	30 40       	sbci	r19, 0x00	; 0
+    1588:	80 40       	sbci	r24, 0x00	; 0
+    158a:	e1 f7       	brne	.-8      	; 0x1584 <main+0x7c>
+    158c:	00 c0       	rjmp	.+0      	; 0x158e <main+0x86>
+    158e:	00 00       	nop
 			_delay_ms(WATCHDOG_ERROR);
-			
-			tbi(PORTB, B_LED);
-    158a:	85 b1       	in	r24, 0x05	; 5
-    158c:	81 27       	eor	r24, r17
-    158e:	85 b9       	out	0x05, r24	; 5
 			
 		}
 

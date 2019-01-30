@@ -23,18 +23,18 @@
 USART_data_t USART_data_RFM;
 
 /* USART data struct used in task */
+USART_data_t USART_data_BLT;
+
+/* USART data struct used in task */
 USART_data_t USART_data_PC;
 
-/*
+
 volatile	uint8_t port_A;   //Ulozena posledna hodnota na porte A
-volatile	uint8_t port_B;	  //Ulozena posledna hodnota na porte B*/
+volatile	uint8_t port_B;	  //Ulozena posledna hodnota na porte B
 
 volatile uint8_t STATE = 0x00;	 // Bajt hovoriaci o dovode, preco sa sprava odoslala
 volatile uint8_t CAM_READY = 0x00; // Cislo kamery v pripravnom rezime
 volatile uint8_t CAM_LIVE = 0x00;  // Cislo kamery v ostrom vyslieani
-
-volatile uint8_t port_A;
-volatile uint8_t port_B;
 
 void setTally_CONN()
 {
@@ -51,23 +51,6 @@ void setTally_CONN()
 					   false,
 					   PORT_OPC_PULLUP_gc,
 					   PORT_ISC_RISING_gc);
-	/*
-	PORTA.PIN0CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN1CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN2CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN3CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN4CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN5CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN6CTRL = PORT_OPC_PULLUP_gc;
-    PORTA.PIN7CTRL = PORT_OPC_PULLUP_gc;
-    
-    PORTB.PIN0CTRL = PORT_OPC_PULLUP_gc;
-    PORTB.PIN1CTRL = PORT_OPC_PULLUP_gc;
-    PORTB.PIN2CTRL = PORT_OPC_PULLUP_gc;
-    PORTB.PIN3CTRL = PORT_OPC_PULLUP_gc;
-
-    PORT_SetPinsAsInput(&PORTA, 0xFF);
-    PORT_SetPinsAsInput(&PORTB, 0x0F);*/
 }
 
 void setUp_RFM_USART()
@@ -81,28 +64,28 @@ void setUp_RFM_USART()
 	 */
 
 	/* PC3 (TXD0) as output. */
-	USART_PORT_RFM.DIRSET = PIN3_bm;
+	USART_PORT_LORA.DIRSET = PIN3_bm;
 
 	/* PC2 (RXD0) as input. */
-	USART_PORT_RFM.DIRCLR = PIN2_bm;
+	USART_PORT_LORA.DIRCLR = PIN2_bm;
 
 	/* M0 - nastavenie na nulu */
-	USART_PORT_RFM.DIRSET = PIN0_bm;
-	USART_PORT_RFM.OUTCLR = PIN0_bm;
+	USART_PORT_LORA.DIRSET = PIN0_bm;
+	USART_PORT_LORA.OUTCLR = PIN0_bm;
 
 	/* M1 - nastavenie na nulu */
-	USART_PORT_RFM.DIRSET = PIN1_bm;
-	USART_PORT_RFM.OUTCLR = PIN1_bm;
+	USART_PORT_LORA.DIRSET = PIN1_bm;
+	USART_PORT_LORA.OUTCLR = PIN1_bm;
 
 	/* Use USARTx0 and initialize buffers */
-	USART_InterruptDriver_Initialize(&USART_data_RFM, &USART_RFM, USART_DREINTLVL_LO_gc);
+	USART_InterruptDriver_Initialize(&USART_data_RFM, &USART_LORA, USART_DREINTLVL_LO_gc);
 
 	/* USART, 8 Data bits, No Parity, 1 Stop bit. */
-	USART_Format_Set(&USART_RFM, USART_CHSIZE_8BIT_gc, USART_PMODE_DISABLED_gc, false);
+	USART_Format_Set(&USART_LORA, USART_CHSIZE_8BIT_gc, USART_PMODE_DISABLED_gc, false);
 
 	/* Enable RXC interrupt */
 	//USART_RxdInterruptLevel_Set(USART_data_RFM.usart, USART_RXCINTLVL_LO_gc);
-	USART_RxdInterruptLevel_Set(&USART_RFM, USART_RXCINTLVL_LO_gc);
+	USART_RxdInterruptLevel_Set(&USART_LORA, USART_RXCINTLVL_LO_gc);
 
 	/* Set Baudrate to 9600 bps:
 	 * Use the default I/O clock fequency that is 2 MHz.
@@ -111,11 +94,60 @@ void setUp_RFM_USART()
 	 * Baudrate select = (1/(16*(((I/O clock frequency)/Baudrate)-1)
 	 *                 = 12
 	 */
-	USART_Baudrate_Set(&USART_RFM, 12, 0);
+	USART_Baudrate_Set(&USART_LORA, 12, 0);
 
 	/* Enable both RX and TX. */
-	USART_Rx_Enable(&USART_RFM);
-	USART_Tx_Enable(&USART_RFM);
+	USART_Rx_Enable(&USART_LORA);
+	USART_Tx_Enable(&USART_LORA);
+}
+
+void setUp_BLT_USART()
+{
+	/*
+	 *    USART configuration:
+	 *      - 8 bit character size
+	 *      - No parity
+	 *      - 1 stop bit
+	 *      - 9600 Baud
+	 */
+
+	/* PC7 (TXD1) as output. */
+	USART_PORT_BLT.DIRSET = PIN7_bm;
+
+	/* PC6 (RXD1) as input. */
+	USART_PORT_BLT.DIRCLR = PIN6_bm;
+
+	//Nastavovanie vstupu STATUS z BLT
+	PORT_ConfigurePins(&USART_PORT_BLT,
+					   0x20,
+					   false,
+					   false,
+					   PORT_OPC_PULLUP_gc,
+					   PORT_ISC_RISING_gc);
+
+	
+	/* Use USARTx0 and initialize buffers */
+	USART_InterruptDriver_Initialize(&USART_data_BLT, &USART_BLT, USART_DREINTLVL_LO_gc);
+
+	/* USART, 8 Data bits, No Parity, 1 Stop bit. */
+	USART_Format_Set(&USART_BLT, USART_CHSIZE_8BIT_gc, USART_PMODE_DISABLED_gc, false);
+
+	/* Enable RXC interrupt */
+	//USART_RxdInterruptLevel_Set(USART_data_RFM.usart, USART_RXCINTLVL_LO_gc);
+	USART_RxdInterruptLevel_Set(&USART_BLT, USART_RXCINTLVL_LO_gc);
+
+	/* Set Baudrate to 9600 bps:
+	 * Use the default I/O clock fequency that is 2 MHz.
+	 * Do not use the baudrate scale factor
+	 *
+	 * Baudrate select = (1/(16*(((I/O clock frequency)/Baudrate)-1)
+	 *                 = 12
+	 */
+	USART_Baudrate_Set(&USART_BLT, 12, 0);
+
+	/* Enable both RX and TX. */
+	USART_Rx_Enable(&USART_BLT);
+	USART_Tx_Enable(&USART_BLT);
 }
 
 void setUp_PC_USART()
@@ -185,43 +217,82 @@ void setTimer_Tally()
 void sendStatus_RFM()
 {
 
-	while (!(USARTC0_STATUS & USART_DREIF_bm))
-		; //Wait until DATA buffer is empty
+	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
 
 	USARTC0_DATA = STATE;
 
-	while (!(USARTC0_STATUS & USART_DREIF_bm))
-		; //Wait until DATA buffer is empty
+	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
 
 	USARTC0_DATA = CAM_LIVE;
 
-	while (!(USARTC0_STATUS & USART_DREIF_bm))
-		; //Wait until DATA buffer is empty
+	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
 
 	USARTC0_DATA = CAM_READY;
 
-	while (!(USARTC0_STATUS & USART_DREIF_bm))
-		; //Wait until DATA buffer is empty
+	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
 
 	USARTC0_DATA = USART_END_CHAR;
-
-	STATE = NORMAL;
+	
 }
 
-void sendChar(char c)
+void sendStatus_BLT()
+{
+	
+	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
+	; //Wait until DATA buffer is empty
+
+	USART_PutChar(&USART_BLT, STATE);
+	
+	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
+	; //Wait until DATA buffer is empty
+
+	USART_PutChar(&USART_BLT, CAM_LIVE);
+	
+	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
+	; //Wait until DATA buffer is empty
+
+	USART_PutChar(&USART_BLT, CAM_READY);
+	
+	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
+	; //Wait until DATA buffer is empty
+
+	USART_PutChar(&USART_BLT, USART_END_CHAR);
+
+}
+
+void sendCharRFM(char c)
 {
 
 	while (!(USARTC0_STATUS & USART_DREIF_bm))
 		; //Wait until DATA buffer is empty
 
 	USARTC0_DATA = c;
+	
 }
 
-void sendString(char *text)
+void sendCharBLT(char c)
+{
+
+	while (!(USARTC1_STATUS & USART_DREIF_bm))
+		; //Wait until DATA buffer is empty
+
+	USARTC1_DATA = c;
+}
+
+void sendCharPC(char c)
+{
+
+	while (!(USARTE0_STATUS & USART_DREIF_bm))
+		; //Wait until DATA buffer is empty
+
+	USARTE0_DATA = c;
+}
+
+void sendStringRFM(char *text)
 {
 	while (*text)
 	{
-		sendChar(*text++);
+		sendCharRFM(*text++);
 	}
 }
 
@@ -229,7 +300,9 @@ int main(void)
 {
 	setUp_RFM_USART();
 
-	setUp_PC_USART();
+	//setUp_PC_USART();
+	
+	setUp_BLT_USART();
 
 	setTimer_Beacon();
 
@@ -244,14 +317,10 @@ int main(void)
 		if (STATE == REFRESH || STATE == CHANGED)
 		{
 			sendStatus_RFM();
+			//sendStatus_BLT();
+			STATE = NORMAL;
 		}
-		_delay_ms(SYSTEM_REFRESH);
-
-		/*
-	   	  if (USART_RXBufferData_Available(&USART_data_PC))
-	   	  {
-		   	  sendChar(USART_RXBuffer_GetByte(&USART_data_PC));	  
-	   	  }*/
+		_delay_ms(SYSTEM_REFRESH);	   	 
 	}
 }
 
@@ -264,6 +333,10 @@ int main(void)
 ISR(USARTC0_RXC_vect)
 {
 	USART_RXComplete(&USART_data_RFM);
+	
+	while(USART_RXBufferData_Available(&USART_data_RFM)){
+		sendCharBLT(USART_RXBuffer_GetByte(&USART_data_RFM));
+	}
 }
 
 ISR(USARTE0_RXC_vect)
@@ -271,6 +344,22 @@ ISR(USARTE0_RXC_vect)
 	USART_RXComplete(&USART_data_PC);
 }
 
+ISR(USARTC1_RXC_vect)
+{
+	USART_RXComplete(&USART_data_BLT);
+
+	while(USART_RXBufferData_Available(&USART_data_BLT)){
+
+		while (!(USART_IsTXDataRegisterEmpty(&USART_LORA)))
+		; //Wait until DATA buffer is empty
+
+		USART_PutChar(&USART_LORA, USART_RXBuffer_GetByte(&USART_data_BLT) );
+		}
+	
+}
+
+
+/*
 ISR(USARTC0_DRE_vect)
 {
 	USART_DataRegEmpty(&USART_data_RFM);
@@ -280,7 +369,7 @@ ISR(USARTE0_DRE_vect)
 {
 	USART_DataRegEmpty(&USART_data_PC);
 }
-
+*/
 
 // Tell compiler to associate this interrupt handler with the TCC0_OVF_vect vector.
 ISR(TCC1_OVF_vect) // TALLY
@@ -303,5 +392,5 @@ ISR(TCC1_OVF_vect) // TALLY
 
 ISR(TCC0_OVF_vect) // BEACON
 {
-	STATE = 1; //Pravidelne zasielanie dat
+	STATE = REFRESH; //Pravidelne zasielanie dat
 }
