@@ -281,7 +281,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1aa6
+.text           0x00000000     0x1ab6
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -415,65 +415,65 @@ END GROUP
                 0x0000146e        0xa main.o
                 0x0000146e                printPrepairedMessage
  .text.printRecievedMessage
-                0x00001478       0x7c main.o
+                0x00001478       0x80 main.o
                 0x00001478                printRecievedMessage
  .text.sendReportAboutError
-                0x000014f4       0x14 main.o
-                0x000014f4                sendReportAboutError
- .text.main     0x00001508       0xc2 main.o
-                0x00001508                main
+                0x000014f8       0x14 main.o
+                0x000014f8                sendReportAboutError
+ .text.main     0x0000150c       0xce main.o
+                0x0000150c                main
  .text.__vector_18
-                0x000015ca       0x6a main.o
-                0x000015ca                __vector_18
+                0x000015da       0x6a main.o
+                0x000015da                __vector_18
  .text.__vector_14
-                0x00001634       0x46 main.o
-                0x00001634                __vector_14
+                0x00001644       0x46 main.o
+                0x00001644                __vector_14
  .text.messCamera
-                0x0000167a       0x8e printMessenge.o
-                0x0000167a                messCamera
+                0x0000168a       0x8e printMessenge.o
+                0x0000168a                messCamera
  .text.ssd1306_command
-                0x00001708       0x20 ssd1306.o
-                0x00001708                ssd1306_command
+                0x00001718       0x20 ssd1306.o
+                0x00001718                ssd1306_command
  .text.InitializeDisplay
-                0x00001728       0xd4 ssd1306.o
-                0x00001728                InitializeDisplay
+                0x00001738       0xd4 ssd1306.o
+                0x00001738                InitializeDisplay
  .text.displayOn
-                0x000017fc        0x8 ssd1306.o
-                0x000017fc                displayOn
+                0x0000180c        0x8 ssd1306.o
+                0x0000180c                displayOn
  .text.displayOff
-                0x00001804        0x8 ssd1306.o
-                0x00001804                displayOff
+                0x00001814        0x8 ssd1306.o
+                0x00001814                displayOff
  .text.SendChar
-                0x0000180c       0x20 ssd1306.o
-                0x0000180c                SendChar
- .text.setXY    0x0000182c       0x2e ssd1306.o
-                0x0000182c                setXY
+                0x0000181c       0x20 ssd1306.o
+                0x0000181c                SendChar
+ .text.setXY    0x0000183c       0x2e ssd1306.o
+                0x0000183c                setXY
  .text.clear_display
-                0x0000185a       0x26 ssd1306.o
-                0x0000185a                clear_display
+                0x0000186a       0x26 ssd1306.o
+                0x0000186a                clear_display
  .text.printBigNumber
-                0x00001880       0xb0 ssd1306.o
-                0x00001880                printBigNumber
- .text.sendStr  0x00001930       0x58 ssd1306.o
-                0x00001930                sendStr
+                0x00001890       0xb0 ssd1306.o
+                0x00001890                printBigNumber
+ .text.sendStr  0x00001940       0x58 ssd1306.o
+                0x00001940                sendStr
  .text.printTallyNumber
-                0x00001988       0x70 ssd1306.o
-                0x00001988                printTallyNumber
+                0x00001998       0x70 ssd1306.o
+                0x00001998                printTallyNumber
  .text.sendCharTOMAS
-                0x000019f8       0x5a ssd1306.o
-                0x000019f8                sendCharTOMAS
+                0x00001a08       0x5a ssd1306.o
+                0x00001a08                sendCharTOMAS
  .text.libgcc.div
-                0x00001a52       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodhi4.o)
-                0x00001a52                _div
-                0x00001a52                __divmodhi4
+                0x00001a62       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodhi4.o)
+                0x00001a62                _div
+                0x00001a62                __divmodhi4
  .text.libgcc.div
-                0x00001a7a       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodhi4.o)
-                0x00001a7a                __udivmodhi4
-                0x00001aa2                . = ALIGN (0x2)
+                0x00001a8a       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodhi4.o)
+                0x00001a8a                __udivmodhi4
+                0x00001ab2                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001aa2        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x00001aa2                _exit
-                0x00001aa2                exit
+ .fini9         0x00001ab2        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00001ab2                _exit
+                0x00001ab2                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -492,11 +492,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001aa2        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00001ab2        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001aa6                _etext = .
+                0x00001ab6                _etext = .
 
-.data           0x00800100       0x34 load address 0x00001aa6
+.data           0x00800100       0x34 load address 0x00001ab6
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -538,8 +538,8 @@ END GROUP
                 0x00800538                timerx
                 0x0080053a                RX_buffer
                 0x008005b2                PROVIDE (__bss_end, .)
-                0x00001aa6                __data_load_start = LOADADDR (.data)
-                0x00001ada                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00001ab6                __data_load_start = LOADADDR (.data)
+                0x00001aea                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x008005b2        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -627,13 +627,13 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1e67
+.debug_info     0x00000000     0x1e6b
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0x1ab I2C.o
- .debug_info    0x0000079f      0x759 main.o
- .debug_info    0x00000ef8      0x244 printMessenge.o
- .debug_info    0x0000113c      0xd2b ssd1306.o
+ .debug_info    0x0000079f      0x75d main.o
+ .debug_info    0x00000efc      0x244 printMessenge.o
+ .debug_info    0x00001140      0xd2b ssd1306.o
 
 .debug_abbrev   0x00000000      0xbb1
  *(.debug_abbrev)
@@ -643,13 +643,13 @@ END GROUP
  .debug_abbrev  0x000008cf       0xa9 printMessenge.o
  .debug_abbrev  0x00000978      0x239 ssd1306.o
 
-.debug_line     0x00000000     0x109d
+.debug_line     0x00000000     0x10a9
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000133      0x2aa I2C.o
- .debug_line    0x000003dd      0x5f6 main.o
- .debug_line    0x000009d3      0x129 printMessenge.o
- .debug_line    0x00000afc      0x5a1 ssd1306.o
+ .debug_line    0x000003dd      0x602 main.o
+ .debug_line    0x000009df      0x129 printMessenge.o
+ .debug_line    0x00000b08      0x5a1 ssd1306.o
 
 .debug_frame    0x00000000      0x47c
  *(.debug_frame)
@@ -670,12 +670,12 @@ END GROUP
  .debug_str     0x00000665       0xd9 ssd1306.o
                                 0x369 (size before relaxing)
 
-.debug_loc      0x00000000     0x1042
+.debug_loc      0x00000000     0x1070
  *(.debug_loc)
  .debug_loc     0x00000000      0x180 I2C.o
- .debug_loc     0x00000180      0x270 main.o
- .debug_loc     0x000003f0       0x65 printMessenge.o
- .debug_loc     0x00000455      0xbed ssd1306.o
+ .debug_loc     0x00000180      0x29e main.o
+ .debug_loc     0x0000041e       0x65 printMessenge.o
+ .debug_loc     0x00000483      0xbed ssd1306.o
 
 .debug_macinfo
  *(.debug_macinfo)

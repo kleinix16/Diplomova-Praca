@@ -1,0 +1,95 @@
+%!Adobe-FontList 1.19
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CenturyGothic
+FamilyName:Century Gothic
+StyleName:Regular
+FullName:Century Gothic
+MenuName:Century Gothic
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\klein\Desktop\Diplomova-Praca\Projekt_3\Projekt_1_plagat\Document fonts\GOTHIC.TTF
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:137568
+FileModTime:1509663839
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Century Gothic
+NameArray:0,Win,1,Century Gothic
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CenturyGothic-Bold
+FamilyName:Century Gothic
+StyleName:Bold
+FullName:Century Gothic Bold
+MenuName:Century Gothic
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\klein\Desktop\Diplomova-Praca\Projekt_3\Projekt_1_plagat\Document fonts\GOTHICB.TTF
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:129676
+FileModTime:1509663839
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Century Gothic Bold
+NameArray:0,Win,1,Century Gothic
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CenturyGothic-BoldItalic
+FamilyName:Century Gothic
+StyleName:Bold Italic
+FullName:Century Gothic Bold Italic
+MenuName:Century Gothic
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:C:\Users\klein\Desktop\Diplomova-Praca\Projekt_3\Projekt_1_plagat\Document fonts\GOTHICBI.TTF
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:139084
+FileModTime:1509663839
+WeightClass:700
+WidthClass:5
+AngleClass:1
+NameArray:0,Mac,4,Century Gothic Bold Italic
+NameArray:0,Win,1,Century Gothic
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CenturyGothic-Italic
+FamilyName:Century Gothic
+StyleName:Italic
+FullName:Century Gothic Italic
+MenuName:Century Gothic
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\klein\Desktop\Diplomova-Praca\Projekt_3\Projekt_1_plagat\Document fonts\GOTHICI.TTF
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:148520
+FileModTime:1509663839
+WeightClass:400
+WidthClass:5
+AngleClass:1
+NameArray:0,Mac,4,Century Gothic Italic
+NameArray:0,Win,1,Century Gothic
+%EndFont
+

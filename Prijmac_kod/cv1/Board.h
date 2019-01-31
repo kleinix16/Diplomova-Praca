@@ -16,25 +16,14 @@
 #define CAMERA 2
 #define CAMERA_MASK 0x02
 
-
-//***********MESS STATUS****
-#define REFRESH			0x62	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
-#define CHANGED			0x73	//Sprava generovana pri zmene kamier
-#define MESSAGE_BASIC	0x64	//Sprava od rezisera - predpripravena
-#define MESSAGE_ADVANCE 0x65	//Sprava od rezisera - napisana
-#define RESPONSE		0x66	//Odpoved kameramanov
-#define ERROR			0xFF	//Chybna sprava
-
-
-/*
 //***********MESS STATUS****
 #define REFRESH			0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
 #define CHANGED			0x02	//Sprava generovana pri zmene kamier
-#define MESSAGE_BASIC	0x64	//Sprava od rezisera - predpripravena
-#define MESSAGE_ADVANCE 0x65	//Sprava od rezisera - napisana
+#define MESSAGE_BASIC	65	//Sprava od rezisera - predpripravena
+#define MESSAGE_ADVANCE 70	//Sprava od rezisera - napisana
 #define RESPONSE		0x08	//Odpoved kameramanov
 #define ERROR			0xFF	//Chybna sprava
-*/
+
 
 //***********TIMES****
 #define WATCHDOG_ERROR 150
