@@ -29,12 +29,29 @@ USART_data_t USART_data_BLT;
 USART_data_t USART_data_PC;
 
 
+
 volatile	uint8_t port_A;   //Ulozena posledna hodnota na porte A
 volatile	uint8_t port_B;	  //Ulozena posledna hodnota na porte B
 
-volatile uint8_t STATE = 0x00;	 // Bajt hovoriaci o dovode, preco sa sprava odoslala
-volatile uint8_t CAM_READY = 0x00; // Cislo kamery v pripravnom rezime
-volatile uint8_t CAM_LIVE = 0x00;  // Cislo kamery v ostrom vyslieani
+
+// Dovod spravy, CAMERA_LIVE, CAMERA_READY, Ukoncovaci znak spravy
+uint8_t cameraStatus[4] = {0x00, 0x00, 0x00, USART_END_CHAR}; 
+
+
+#define NUM_BYTES  128
+
+uint8_t RX_RFM_data[NUM_BYTES];
+uint8_t RX_RFM_index = 0;
+
+uint8_t RX_PC_data[NUM_BYTES];
+uint8_t RX_PC_index = 0;
+
+uint8_t RX_BLT_data[NUM_BYTES];
+uint8_t RX_BLT_index = 0;
+
+bool newStatus = false;
+bool newMessenge = false;
+bool newResponse = false;
 
 void setTally_CONN()
 {
@@ -214,51 +231,6 @@ void setTimer_Tally()
 	TC1_ConfigClockSource(&TCC1, TC_CLKSEL_DIV1024_gc);
 }
 
-void sendStatus_RFM()
-{
-
-	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
-
-	USARTC0_DATA = STATE;
-
-	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
-
-	USARTC0_DATA = CAM_LIVE;
-
-	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
-
-	USARTC0_DATA = CAM_READY;
-
-	while (!(USARTC0_STATUS & USART_DREIF_bm))		; //Wait until DATA buffer is empty
-
-	USARTC0_DATA = USART_END_CHAR;
-	
-}
-
-void sendStatus_BLT()
-{
-	
-	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
-	; //Wait until DATA buffer is empty
-
-	USART_PutChar(&USART_BLT, STATE);
-	
-	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
-	; //Wait until DATA buffer is empty
-
-	USART_PutChar(&USART_BLT, CAM_LIVE);
-	
-	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
-	; //Wait until DATA buffer is empty
-
-	USART_PutChar(&USART_BLT, CAM_READY);
-	
-	while (!(USART_IsTXDataRegisterEmpty(&USART_BLT)))
-	; //Wait until DATA buffer is empty
-
-	USART_PutChar(&USART_BLT, USART_END_CHAR);
-
-}
 
 void sendCharRFM(char c)
 {
@@ -270,29 +242,58 @@ void sendCharRFM(char c)
 	
 }
 
-void sendCharBLT(char c)
-{
-
-	while (!(USARTC1_STATUS & USART_DREIF_bm))
-		; //Wait until DATA buffer is empty
-
-	USARTC1_DATA = c;
-}
-
-void sendCharPC(char c)
-{
-
-	while (!(USARTE0_STATUS & USART_DREIF_bm))
-		; //Wait until DATA buffer is empty
-
-	USARTE0_DATA = c;
-}
-
 void sendStringRFM(char *text)
 {
 	while (*text)
 	{
 		sendCharRFM(*text++);
+	}
+}
+
+void sendBLT2RFM(void)
+{
+	TC_Restart(&TCC0);
+
+	uint8_t i = 0;
+	while (i <= RX_BLT_index)
+	{
+		bool byteToBuffer;
+		byteToBuffer = USART_TXBuffer_PutByte(&USART_data_RFM, RX_BLT_data[i]);
+		if (byteToBuffer)
+		{
+			i++;
+		}
+	}
+	RX_BLT_index = 0;
+}
+
+void sendRFM2BLT(void)
+{
+
+	uint8_t i = 0;
+	while (i <= RX_RFM_index)
+	{
+		bool byteToBuffer;
+		byteToBuffer = USART_TXBuffer_PutByte(&USART_data_BLT, RX_RFM_data[i]);
+		if (byteToBuffer)
+		{
+			i++;
+		}
+	}
+	RX_RFM_index = 0;
+}
+
+void sendSTATUS2RFM(void)
+{
+	TC_Restart(&TCC0);
+	
+	uint8_t	i = 0;
+	while (i < 4) {
+		bool byteToBuffer;
+		byteToBuffer = USART_TXBuffer_PutByte(&USART_data_RFM, cameraStatus[i]);
+		if(byteToBuffer){
+			i++;
+		}
 	}
 }
 
@@ -314,12 +315,41 @@ int main(void)
 
 	while (1)
 	{
-		if (STATE == REFRESH || STATE == CHANGED)
+
+		if(cameraStatus[0] != NORMAL)
 		{
-			sendStatus_RFM();
-			//sendStatus_BLT();
-			STATE = NORMAL;
+			sendSTATUS2RFM();
+			cameraStatus[0] = NORMAL;
 		}
+
+		//Preposielanie Bluetooth prijatych dat na RF komunikacny kanal
+		while (USART_RXBufferData_Available(&USART_data_BLT))
+		{
+			RX_BLT_data[RX_BLT_index] = USART_RXBuffer_GetByte(&USART_data_BLT);
+			if (RX_BLT_data[RX_BLT_index] == USART_END_CHAR)
+			{
+				sendBLT2RFM();
+			}
+			else
+			{
+				RX_BLT_index++;
+			}
+		}
+	
+		//Preposielanie RF komunikacie na BLT
+		while (USART_RXBufferData_Available(&USART_data_RFM))
+		{
+			RX_RFM_data[RX_RFM_index] = USART_RXBuffer_GetByte(&USART_data_RFM);
+			if (RX_RFM_data[RX_RFM_index] == USART_END_CHAR)
+			{
+				sendRFM2BLT();
+			}
+			else
+			{
+				RX_BLT_index++;
+			}
+		}
+
 		_delay_ms(SYSTEM_REFRESH);	   	 
 	}
 }
@@ -333,10 +363,6 @@ int main(void)
 ISR(USARTC0_RXC_vect)
 {
 	USART_RXComplete(&USART_data_RFM);
-	
-	while(USART_RXBufferData_Available(&USART_data_RFM)){
-		sendCharBLT(USART_RXBuffer_GetByte(&USART_data_RFM));
-	}
 }
 
 ISR(USARTE0_RXC_vect)
@@ -347,21 +373,15 @@ ISR(USARTE0_RXC_vect)
 ISR(USARTC1_RXC_vect)
 {
 	USART_RXComplete(&USART_data_BLT);
-
-	while(USART_RXBufferData_Available(&USART_data_BLT)){
-
-		TC_Restart(&TCC0);
-
-
-		while (!(USART_IsTXDataRegisterEmpty(&USART_LORA)))
-		; //Wait until DATA buffer is empty
-
-		USART_PutChar(&USART_LORA, USART_RXBuffer_GetByte(&USART_data_BLT) );
-		}
 }
 
 
-/*
+/*! \brief Data register empty  interrupt service routine.
+ *
+ *  Data register empty  interrupt service routine.
+ *  Calls the common data register empty complete handler with pointer to the
+ *  correct USART as argument.
+ */
 ISR(USARTC0_DRE_vect)
 {
 	USART_DataRegEmpty(&USART_data_RFM);
@@ -371,7 +391,12 @@ ISR(USARTE0_DRE_vect)
 {
 	USART_DataRegEmpty(&USART_data_PC);
 }
-*/
+
+ISR(USARTC1_DRE_vect)
+{
+	USART_DataRegEmpty(&USART_data_BLT);
+}
+
 
 // Tell compiler to associate this interrupt handler with the TCC0_OVF_vect vector.
 ISR(TCC1_OVF_vect) // TALLY
@@ -384,15 +409,14 @@ ISR(TCC1_OVF_vect) // TALLY
 		port_A = port_A_temp;
 		port_B = port_B_temp;
 
-		CAM_LIVE = ((port_A & 0xC0) >> 2) + port_B;
-		CAM_READY = port_A & 0x3F;
+		cameraStatus[1] = ((port_A & 0xC0) >> 2) + port_B; 	//LIVE CAMERA
+		cameraStatus[2] = port_A & 0x3F;					//READY CAMERA
 
-		STATE = CHANGED; //Odoslanie dat pri zmene na portoch
-		TC_Restart(&TCC0);
+		cameraStatus[0] = CHANGED; //Odoslanie dat pri zmene na portoch
 	}
 }
 
 ISR(TCC0_OVF_vect) // BEACON
 {
-	STATE = REFRESH; //Pravidelne zasielanie dat
+	cameraStatus[0] = REFRESH; //Pravidelne zasielanie dat
 }

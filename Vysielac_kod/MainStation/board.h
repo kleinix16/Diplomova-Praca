@@ -31,7 +31,7 @@
 
 
 //***********TIMES****
-#define SYSTEM_REFRESH 20
+#define SYSTEM_REFRESH 10
 #define BEACON_REFRESH 0x2710			//5000ms  - pouziva sa delicka 1024
 #define OUTPUT_PIN_REFRESH 0x0190		//200ms   - pouziva sa delicka 1024
 
