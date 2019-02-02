@@ -350,12 +350,14 @@ ISR(USARTC1_RXC_vect)
 
 	while(USART_RXBufferData_Available(&USART_data_BLT)){
 
+		TC_Restart(&TCC0);
+
+
 		while (!(USART_IsTXDataRegisterEmpty(&USART_LORA)))
 		; //Wait until DATA buffer is empty
 
 		USART_PutChar(&USART_LORA, USART_RXBuffer_GetByte(&USART_data_BLT) );
 		}
-	
 }
 
 

@@ -22,9 +22,13 @@
 
 
 //***********SYSTEM STATUS****
-#define NORMAL   0x00
-#define REFRESH  0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
-#define CHANGED  0x02	//Sprava generovana pri zmene kamier
+#define NORMAL          0x00
+#define REFRESH         0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
+#define CHANGED         0x02	//Sprava generovana pri zmene kamier
+#define MESSAGE			0x04	//Sprava od rezisera - napisana
+#define RESPONSE		0x08	//Odpoved kameramanov
+#define ERROR			0xFF	//Chybna sprava
+
 
 //***********TIMES****
 #define SYSTEM_REFRESH 20
