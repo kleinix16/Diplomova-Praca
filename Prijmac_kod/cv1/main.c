@@ -23,24 +23,27 @@
 #include <stdio.h>
 #include "ringBuffer.h"
 
-
-circularQueue_t   myQueue;
+circularQueue_t myQueue;
 
 uint8_t new_msg = 0;
 
 bool system_error = false;
 bool watchdog = false;
 
+bool zobrazenaSprava = false;
+
 volatile uint8_t CAM_READY = 10; // Cislo kamery v pripravnom rezime
 volatile uint8_t CAM_LIVE = 10;  // Cislo kamery v ostrom vyslieani
 
-uint16_t timerx;
+uint16_t timerx_T0;
 
+uint16_t timerx_T2;
 
-void initBuffer(){
-	
+void initBuffer()
+{
+
 	initializeQueue(&myQueue);
-	for(int i=0; i<MAX_ITEMS+1; i++)
+	for (int i = 0; i < MAX_ITEMS + 1; i++)
 	{
 		putItem(&myQueue, i);
 	}
@@ -77,6 +80,14 @@ void setup_T0_WD()
 	TCCR0B = 0x5; //clk/1024
 	OCR0A = WATCHDOG_ISR_CMP;
 	TIMSK0 |= (1 << OCIE0A); //lokalme povolenie prerusenia
+}
+
+void setup_T1_showedMess()
+{
+	TCCR2A = 0x2; //rezim CTC interrupt pri zhode z OCR0A
+	TCCR2B = 0x5; //clk/1024
+	OCR2A = SHOWMESSENGE_ISR_CMP;
+	TIMSK2 |= (1 << OCIE2A); //lokalme povolenie prerusenia
 }
 
 void setup_Display(void)
@@ -137,20 +148,20 @@ void parseCameraStatus()
 {
 	int liveCamera;
 	getItem(&myQueue, &liveCamera);
-	
+
 	int readyCamera;
 	getItem(&myQueue, &readyCamera);
-	
+
 	// Ako prve skontrolujem stav tejto kamery - LIVE rezim
 	if (!(liveCamera & CAMERA_MASK))
 	{
 		CAM_LIVE = CAMERA;
 	}
-	else if (!(liveCamera& 0x01))
+	else if (!(liveCamera & 0x01))
 	{
 		CAM_LIVE = 1;
 	}
-	else if (!(liveCamera& 0x02))
+	else if (!(liveCamera & 0x02))
 	{
 		CAM_LIVE = 2;
 	}
@@ -208,10 +219,9 @@ void parseCameraStatus()
 	{
 		CAM_READY = 0;
 	}
-	
+
 	int pomChar;
-	getItem(&myQueue, &pomChar);  //Nacitanie koncoveho znaku USART
-	
+	getItem(&myQueue, &pomChar); //Nacitanie koncoveho znaku USART
 }
 
 void refresh_LED()
@@ -255,9 +265,8 @@ void printPrepairedMessage()
 
 	if (ktoraKamera & CAMERA_MASK)
 	{
-		messCamera(0);			
+		messCamera(indexSpravy);
 	}
-	
 }
 
 void printRecievedMessage()
@@ -265,9 +274,9 @@ void printRecievedMessage()
 	int ktoraKamera;
 	getItem(&myQueue, &ktoraKamera);
 
-	int pomChar; 
+	int pomChar;
 	getItem(&myQueue, &pomChar);
-	
+
 	if (ktoraKamera & CAMERA_MASK)
 	{
 		displayOff();
@@ -278,30 +287,28 @@ void printRecievedMessage()
 
 		uint8_t dispalyCharIndex = 0;
 
-		while(pomChar != USART_END_CHAR )
+		while (pomChar != USART_END_CHAR)
 		{
-			if(!(dispalyCharIndex<15))
+			if (!(dispalyCharIndex < 15))
 			{
 				posX++;
 				setXY(posX, 0);
 			}
-			
+
 			getItem(&myQueue, &pomChar);
 			sendCharTOMAS(pomChar);
 			dispalyCharIndex++;
 		}
 
 		displayOn();
-
-	}else
+	}
+	else
 	{
-		while(pomChar != USART_END_CHAR )
+		while (pomChar != USART_END_CHAR)
 		{
 			getItem(&myQueue, &pomChar);
 		}
-		
 	}
-	
 }
 
 void sendBackeUnknowMessenge()
@@ -309,34 +316,32 @@ void sendBackeUnknowMessenge()
 	USART_send(ERROR);
 
 	int pomChar;
-	
-	do 
+
+	do
 	{
 		getItem(&myQueue, &pomChar);
 		//USART_send(pomChar); //vypisovanie buffra
 	} while (pomChar != USART_END_CHAR);
 
-		
 	USART_send(USART_END_CHAR);
 }
 
-
-
 int main(void)
 {
-	
+
 	setup_Display();
 
 	statusDisplay();
 
 	setup_LED();
 	setup_USART();
+
 	setup_T0_WD();
+	setup_T1_showedMess();
 
 	sei(); //Povoleni preruseni
-	
+
 	int temp;
-	
 
 	while (1)
 	{
@@ -345,45 +350,49 @@ int main(void)
 			if (new_msg != 0)
 			{
 				cbi(PORTB, B_LED); //vypnutie modej LED, pripad kekz sprava pride pocas svietenia
-				
+
 				getItem(&myQueue, &temp);
-								
+
 				switch (temp) //Prvz znak spravz nesie priznak akz typ spravy je prenasany
 				{
-				
-				case REFRESH:						//Refresh / Change - zmena stavu kamier
+
+				case REFRESH: //Refresh / Change - zmena stavu kamier
 
 				case CHANGED:
 					parseCameraStatus();
-					statusDisplay();
-					refresh_LED();					//Nastavenie LED podla prijatych dat
+					refresh_LED(); //Nastavenie LED podla prijatych dat
+					if (zobrazenaSprava == false)
+					{
+						statusDisplay();
+					}
 
-				break;
+					break;
 
-				
-				case MESSAGE_BASIC:					//Sprava s informaciou od rezie - predpripravena
+				case MESSAGE_BASIC: //Sprava s informaciou od rezie - predpripravena
 					printPrepairedMessage();
-					
-					
+					zobrazenaSprava = true;
+					timerx_T2 = 0;
 
 					break;
 
-				
-				case MESSAGE_ADVANCE:				//Sprava s informaciou od rezie - pisana
-						printRecievedMessage();
+				case MESSAGE_ADVANCE: //Sprava s informaciou od rezie - pisana
+					printRecievedMessage();
+					zobrazenaSprava = true;
+					timerx_T2 = 0;
+
 					break;
 
-				
-				case RESPONSE:						//Sprava s informaciou do rezie od kameramanov
+				case RESPONSE: //Sprava s informaciou do rezie od kameramanov
 					break;
 
-				default:							//sendBackeUnknowMessenge();
-					
+				default: //sendBackeUnknowMessenge();
+					sendBackeUnknowMessenge();
 					break;
 				}
 				new_msg--; //Nulovanie priznaku novej spravy
 			}
-		}	else //V pripade ze Watchdog zaznamena chybu spusti sa blikanie modrej LED
+		}
+		else //V pripade ze Watchdog zaznamena chybu spusti sa blikanie modrej LED
 		{
 			//ToDo - pekny efekt by bol, keby sa zoslabovala
 			cbi(LED_PORT, R_LED);
@@ -413,26 +422,40 @@ int main(void)
 ISR(USART_RX_vect)
 {
 	watchdog = false; // nulovanie chyboveho stavu dispeja
-	timerx = 0;		  // restart casovaca - watchdog
+	timerx_T0 = 0;	// restart casovaca - watchdog
 
 	uint8_t receivedChar = UDR0;
 	//USART_send(receivedChar);  //local echo
-	
-	if(receivedChar == USART_END_CHAR)
+
+	if (receivedChar == USART_END_CHAR)
 	{
 		new_msg++;
 	}
-	
-	putItem(&myQueue, receivedChar);
 
+	putItem(&myQueue, receivedChar);
 }
 
 ISR(TIMER0_COMPA_vect)
 {
-	timerx++;
-	if (timerx > WATCHDOG_ISR_CNT)
+	timerx_T0++;
+	if (timerx_T0 > WATCHDOG_ISR_CNT)
 	{
 		watchdog = true;
-		timerx = 0;
+		timerx_T0 = 0;
+	}
+}
+
+ISR(TIMER2_COMPA_vect)
+{
+	if (zobrazenaSprava == true)
+	{
+		timerx_T2++;
+		if (timerx_T2 > SHOWMESSENGE_ISR_CNT)
+		{
+			zobrazenaSprava = false;
+			timerx_T2 = 0;
+			clear_display();
+			statusDisplay();			
+		}
 	}
 }
