@@ -35,6 +35,8 @@
 #define BEACON_REFRESH 0x2710			//5000ms  - pouziva sa delicka 1024
 #define OUTPUT_PIN_REFRESH 0x0190		//200ms   - pouziva sa delicka 1024
 
+#define RX_NUM_BYTES  128
+
 #define R_LED  PORTD0
 #define B_LED  PORTD1
 #define G_LED  PORTD2

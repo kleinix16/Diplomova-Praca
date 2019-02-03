@@ -23,44 +23,16 @@
 
 char RX_buffer[USART_BUFFER];
 uint8_t RX_index = 0;
+uint8_t MSG_index = 0;
+uint8_t new_msg = 0;
 
 bool system_error = false;
-bool new_msg = false;
 bool watchdog = false;
 
 volatile uint8_t CAM_READY = 10; // Cislo kamery v pripravnom rezime
 volatile uint8_t CAM_LIVE = 10;  // Cislo kamery v ostrom vyslieani
 
 uint16_t timerx;
-
-//uint8_t _i2c_address = 0X78; // this works 0X3C or 0X3D does not
-uint8_t display_buffer[1024];
-
-///////////////////////////////////////////////////////////
-// Transfers the local buffer to the CGRAM in the SSD1306
-void transferDisplayBuffer()
-{
-	uint8_t j = 0;
-
-	// set the Column and Page addresses to 0,0
-	setColAddress();
-	setPageAddress();
-
-	I2C_Start(_i2c_address);
-	//I2C_Write(_i2c_address);
-	I2C_Write(0X40); // data not command
-	for (j = 0; j < 1024; j++)
-	{
-		I2C_Write(display_buffer[j]);
-	}
-
-	I2C_Stop();
-}
-
-void initDisplayBuffer()
-{
-	memset(display_buffer, 0X04, 1024); // tried other values
-}
 
 void setup_LED(void)
 {
@@ -152,31 +124,31 @@ uint8_t USART_receive(void)
 void parseCameraStatus()
 {
 	// Ako prve skontrolujem stav tejto kamery - LIVE rezim
-	if (!(RX_buffer[1] & CAMERA_MASK))
+	if (!(RX_buffer[MSG_index + 1] & CAMERA_MASK))
 	{
 		CAM_LIVE = CAMERA;
 	}
-	else if (!(RX_buffer[1] & 0x01))
+	else if (!(RX_buffer[MSG_index + 1] & 0x01))
 	{
 		CAM_LIVE = 1;
 	}
-	else if (!(RX_buffer[1] & 0x02))
+	else if (!(RX_buffer[MSG_index + 1] & 0x02))
 	{
 		CAM_LIVE = 2;
 	}
-	else if (!(RX_buffer[1] & 0x04))
+	else if (!(RX_buffer[MSG_index + 1] & 0x04))
 	{
 		CAM_LIVE = 3;
 	}
-	else if (!(RX_buffer[1] & 0x08))
+	else if (!(RX_buffer[MSG_index + 1] & 0x08))
 	{
 		CAM_LIVE = 4;
 	}
-	else if (!(RX_buffer[1] & 0x10))
+	else if (!(RX_buffer[MSG_index + 1] & 0x10))
 	{
 		CAM_LIVE = 5;
 	}
-	else if (!(RX_buffer[1] & 0x20))
+	else if (!(RX_buffer[MSG_index + 1] & 0x20))
 	{
 		CAM_LIVE = 6;
 	}
@@ -186,31 +158,31 @@ void parseCameraStatus()
 	}
 
 	// Ako prve skontrolujem stav tejto kamery - READY rezim
-	if (!(RX_buffer[2] & CAMERA_MASK))
+	if (!(RX_buffer[MSG_index + 2] & CAMERA_MASK))
 	{
 		CAM_READY = CAMERA;
 	}
-	else if (!(RX_buffer[2] & 0x01))
+	else if (!(RX_buffer[MSG_index + 2] & 0x01))
 	{
 		CAM_READY = 1;
 	}
-	else if (!(RX_buffer[2] & 0x02))
+	else if (!(RX_buffer[MSG_index + 2] & 0x02))
 	{
 		CAM_READY = 2;
 	}
-	else if (!(RX_buffer[2] & 0x04))
+	else if (!(RX_buffer[MSG_index + 2] & 0x04))
 	{
 		CAM_READY = 3;
 	}
-	else if (!(RX_buffer[2] & 0x08))
+	else if (!(RX_buffer[MSG_index + 2] & 0x08))
 	{
 		CAM_READY = 4;
 	}
-	else if (!(RX_buffer[2] & 0x10))
+	else if (!(RX_buffer[MSG_index + 2] & 0x10))
 	{
 		CAM_READY = 5;
 	}
-	else if (!(RX_buffer[2] & 0x20))
+	else if (!(RX_buffer[MSG_index + 2] & 0x20))
 	{
 		CAM_READY = 6;
 	}
@@ -245,7 +217,6 @@ void refresh_LED()
 
 void statusDisplay()
 {
-	clear_display();
 	printTallyNumber(CAM_LIVE, 0, 0); //Velke cislo pre kameru, ktora je von
 	printBigNumber(CAM_READY, 0, 6);  //mensie cislo pre kameru, ktora je von
 }
@@ -257,34 +228,67 @@ void printPrepairedMessage()
 
 void printRecievedMessage()
 {
-	displayOff();
-	clear_display();
-
-	uint8_t indexMess = 2;
-	uint8_t posX = 0;
-
-	setXY(posX, 0);
-	while (RX_buffer[indexMess] != USART_END_CHAR)
+	if (RX_buffer[MSG_index + 1] & CAMERA_MASK)
 	{
-		if ((indexMess - 1) % 15 == 0)
+		displayOff();
+		clear_display();
+
+		uint8_t indexMess = 2;
+		uint8_t posX = 0;
+
+		setXY(posX, 0);
+		while (RX_buffer[MSG_index + indexMess] != USART_END_CHAR)
 		{
-			posX++;
-			setXY(posX, 0);
+			if ((indexMess - 1) % 15 == 0)
+			{
+				posX++;
+				setXY(posX, 0);
+			}
+
+			sendCharTOMAS(RX_buffer[indexMess]);
+
+			indexMess++;
 		}
-
-		sendCharTOMAS(RX_buffer[indexMess]);
-
-		indexMess++;
 	}
 
 	displayOn();
 }
 
-void sendReportAboutError()
+void sendBackeUnknowMessenge()
 {
-	USART_send(ERROR);			//
-	USART_send(CAMERA);			//
-	USART_send(USART_END_CHAR); //
+	USART_send(ERROR);
+
+	while (RX_buffer[MSG_index] != USART_END_CHAR)
+	{
+		USART_send(RX_buffer[MSG_index]);
+
+		MSG_index++;
+
+		if (MSG_index < USART_BUFFER)
+		{
+			MSG_index = 0;
+		}
+	}
+
+	USART_send(USART_END_CHAR);
+	USART_send(MSG_index);
+	MSG_index++;
+	if (MSG_index < USART_BUFFER)
+	{
+		MSG_index = 0;
+	}
+}
+
+void moveMSGindex(uint8_t j)
+{
+	for (int i = 0; i < j; i++)
+	{
+		MSG_index++;
+		if (MSG_index < USART_BUFFER)
+		{
+			MSG_index = 0;
+		}
+	}
 }
 
 int main(void)
@@ -303,11 +307,11 @@ int main(void)
 	{
 		if (watchdog == false)
 		{
-			cbi(PORTB, B_LED); //vypnutie modej LED, pripad kekz sprava pride pocas svietenia
-
-			if (new_msg == true)
+			if (new_msg != 0)
 			{
-				switch (RX_buffer[0]) //Prvz znak spravz nesie priznak akz typ spravy je prenasany
+				cbi(PORTB, B_LED); //vypnutie modej LED, pripad kekz sprava pride pocas svietenia
+
+				switch (RX_buffer[MSG_index]) //Prvz znak spravz nesie priznak akz typ spravy je prenasany
 				{
 				//Refresh / Change - zmena stavu kamier
 				case REFRESH:
@@ -316,24 +320,24 @@ int main(void)
 					parseCameraStatus();
 					statusDisplay();
 					refresh_LED(); //Nastavenie LED podla prijatych dat
+
+					moveMSGindex(4);
+
 					break;
 
 				//Sprava s informaciou od rezie - predpripravena
 				case MESSAGE_BASIC:
-					if (RX_buffer[1] & CAMERA_MASK)
+					if (RX_buffer[MSG_index + 1] & CAMERA_MASK)
 					{
 						printPrepairedMessage();
 					}
 
+					moveMSGindex(4);
 					break;
 
 				//Sprava s informaciou od rezie - pisana
 				case MESSAGE_ADVANCE:
-					if (RX_buffer[1] & CAMERA_MASK)
-					{
-						printRecievedMessage();
-					}
-
+					printRecievedMessage();
 					break;
 
 				//Sprava s informaciou do rezie od kameramanov
@@ -341,13 +345,12 @@ int main(void)
 					break;
 
 				default:
-					sendReportAboutError();
+					//sendBackeUnknowMessenge();
 					break;
 				}
-				new_msg = false; //Nulovanie priznaku novej spravy
+				new_msg--; //Nulovanie priznaku novej spravy
 			}
-		}
-		else //V pripade ze Watchdog zaznamena chybu spusti sa blikanie modrej LED
+		}	else //V pripade ze Watchdog zaznamena chybu spusti sa blikanie modrej LED
 		{
 			//ToDo - pekny efekt by bol, keby sa zoslabovala
 			cbi(LED_PORT, R_LED);
@@ -379,25 +382,20 @@ ISR(USART_RX_vect)
 	watchdog = false; // nulovanie chyboveho stavu dispeja
 	timerx = 0;		  // restart casovaca - watchdog
 
-	if (new_msg == false)
+	RX_buffer[RX_index] = UDR0;
+	//USART_send(RX_buffer [RX_index]);  //local echo
+
+	if (RX_buffer[RX_index] == USART_END_CHAR) //Kontrola na koncovi znak spravy
 	{
-		RX_buffer[RX_index] = UDR0;
-		//USART_send(RX_buffer [RX_index]);  //local echo
+		new_msg++;
+	}
 
-		if (RX_buffer[RX_index] == USART_END_CHAR) //Kontrola na koncovi znak spravy
-		{
-			new_msg = true;
-			RX_index = 0;
-		}
-		else
-		{
-			RX_index++;
-
-			if (RX_index >= USART_BUFFER) // kontrola na pretecenie zasobnika
-			{
-				system_error = true;
-			}
-		}
+	RX_index++;
+	
+	//Kruhovy zasobnik
+	if (!(RX_index < USART_BUFFER))
+	{
+		RX_index = 0;
 	}
 }
 

@@ -169,6 +169,9 @@
     <Compile Include="printMessenge.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ringBuffer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ssd1306.c">
       <SubType>compile</SubType>
     </Compile>

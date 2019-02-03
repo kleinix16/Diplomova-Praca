@@ -38,15 +38,15 @@ volatile	uint8_t port_B;	  //Ulozena posledna hodnota na porte B
 uint8_t cameraStatus[4] = {0x00, 0x00, 0x00, USART_END_CHAR}; 
 
 
-#define NUM_BYTES  128
 
-uint8_t RX_RFM_data[NUM_BYTES];
+
+uint8_t RX_RFM_data[RX_NUM_BYTES];
 uint8_t RX_RFM_index = 0;
 
-uint8_t RX_PC_data[NUM_BYTES];
+uint8_t RX_PC_data[RX_NUM_BYTES];
 uint8_t RX_PC_index = 0;
 
-uint8_t RX_BLT_data[NUM_BYTES];
+uint8_t RX_BLT_data[RX_NUM_BYTES];
 uint8_t RX_BLT_index = 0;
 
 bool newStatus = false;
