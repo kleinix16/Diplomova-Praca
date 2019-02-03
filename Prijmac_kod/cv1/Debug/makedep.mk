@@ -8,5 +8,7 @@ main.c
 
 printMessenge.c
 
+ringBuffer.c
+
 ssd1306.c
 

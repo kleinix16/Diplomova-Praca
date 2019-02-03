@@ -43,7 +43,6 @@
 #define USART_TX PORTD1
 #define USART_RX PORTD0
 
-#define USART_BUFFER 10
 #define USART_END_CHAR 0x61
 
 #define BAUDERATE 9600   

@@ -20,10 +20,12 @@
 #include "printMessenge.h"
 
 #include <stdbool.h>
+#include <stdio.h>
+#include "ringBuffer.h"
 
-char RX_buffer[USART_BUFFER];
-uint8_t RX_index = 0;
-uint8_t MSG_index = 0;
+
+circularQueue_t   myQueue;
+
 uint8_t new_msg = 0;
 
 bool system_error = false;
@@ -33,6 +35,16 @@ volatile uint8_t CAM_READY = 10; // Cislo kamery v pripravnom rezime
 volatile uint8_t CAM_LIVE = 10;  // Cislo kamery v ostrom vyslieani
 
 uint16_t timerx;
+
+
+void initBuffer(){
+	
+	initializeQueue(&myQueue);
+	for(int i=0; i<MAX_ITEMS+1; i++)
+	{
+		putItem(&myQueue, i);
+	}
+}
 
 void setup_LED(void)
 {
@@ -123,32 +135,38 @@ uint8_t USART_receive(void)
 
 void parseCameraStatus()
 {
+	int liveCamera;
+	getItem(&myQueue, &liveCamera);
+	
+	int readyCamera;
+	getItem(&myQueue, &readyCamera);
+	
 	// Ako prve skontrolujem stav tejto kamery - LIVE rezim
-	if (!(RX_buffer[MSG_index + 1] & CAMERA_MASK))
+	if (!(liveCamera & CAMERA_MASK))
 	{
 		CAM_LIVE = CAMERA;
 	}
-	else if (!(RX_buffer[MSG_index + 1] & 0x01))
+	else if (!(liveCamera& 0x01))
 	{
 		CAM_LIVE = 1;
 	}
-	else if (!(RX_buffer[MSG_index + 1] & 0x02))
+	else if (!(liveCamera& 0x02))
 	{
 		CAM_LIVE = 2;
 	}
-	else if (!(RX_buffer[MSG_index + 1] & 0x04))
+	else if (!(liveCamera & 0x04))
 	{
 		CAM_LIVE = 3;
 	}
-	else if (!(RX_buffer[MSG_index + 1] & 0x08))
+	else if (!(liveCamera & 0x08))
 	{
 		CAM_LIVE = 4;
 	}
-	else if (!(RX_buffer[MSG_index + 1] & 0x10))
+	else if (!(liveCamera & 0x10))
 	{
 		CAM_LIVE = 5;
 	}
-	else if (!(RX_buffer[MSG_index + 1] & 0x20))
+	else if (!(liveCamera & 0x20))
 	{
 		CAM_LIVE = 6;
 	}
@@ -158,31 +176,31 @@ void parseCameraStatus()
 	}
 
 	// Ako prve skontrolujem stav tejto kamery - READY rezim
-	if (!(RX_buffer[MSG_index + 2] & CAMERA_MASK))
+	if (!(readyCamera & CAMERA_MASK))
 	{
 		CAM_READY = CAMERA;
 	}
-	else if (!(RX_buffer[MSG_index + 2] & 0x01))
+	else if (!(readyCamera & 0x01))
 	{
 		CAM_READY = 1;
 	}
-	else if (!(RX_buffer[MSG_index + 2] & 0x02))
+	else if (!(readyCamera & 0x02))
 	{
 		CAM_READY = 2;
 	}
-	else if (!(RX_buffer[MSG_index + 2] & 0x04))
+	else if (!(readyCamera & 0x04))
 	{
 		CAM_READY = 3;
 	}
-	else if (!(RX_buffer[MSG_index + 2] & 0x08))
+	else if (!(readyCamera & 0x08))
 	{
 		CAM_READY = 4;
 	}
-	else if (!(RX_buffer[MSG_index + 2] & 0x10))
+	else if (!(readyCamera & 0x10))
 	{
 		CAM_READY = 5;
 	}
-	else if (!(RX_buffer[MSG_index + 2] & 0x20))
+	else if (!(readyCamera & 0x20))
 	{
 		CAM_READY = 6;
 	}
@@ -190,6 +208,10 @@ void parseCameraStatus()
 	{
 		CAM_READY = 0;
 	}
+	
+	int pomChar;
+	getItem(&myQueue, &pomChar);  //Nacitanie koncoveho znaku USART
+	
 }
 
 void refresh_LED()
@@ -223,76 +245,86 @@ void statusDisplay()
 
 void printPrepairedMessage()
 {
-	messCamera(0);
+	int ktoraKamera;
+	int indexSpravy;
+	int poslednyZnak;
+
+	getItem(&myQueue, &ktoraKamera);
+	getItem(&myQueue, &indexSpravy);
+	getItem(&myQueue, &poslednyZnak);
+
+	if (ktoraKamera & CAMERA_MASK)
+	{
+		messCamera(0);			
+	}
+	
 }
 
 void printRecievedMessage()
 {
-	if (RX_buffer[MSG_index + 1] & CAMERA_MASK)
+	int ktoraKamera;
+	getItem(&myQueue, &ktoraKamera);
+
+	int pomChar; 
+	getItem(&myQueue, &pomChar);
+	
+	if (ktoraKamera & CAMERA_MASK)
 	{
 		displayOff();
 		clear_display();
 
-		uint8_t indexMess = 2;
 		uint8_t posX = 0;
-
 		setXY(posX, 0);
-		while (RX_buffer[MSG_index + indexMess] != USART_END_CHAR)
+
+		uint8_t dispalyCharIndex = 0;
+
+		while(pomChar != USART_END_CHAR )
 		{
-			if ((indexMess - 1) % 15 == 0)
+			if(!(dispalyCharIndex<15))
 			{
 				posX++;
 				setXY(posX, 0);
 			}
-
-			sendCharTOMAS(RX_buffer[indexMess]);
-
-			indexMess++;
+			
+			getItem(&myQueue, &pomChar);
+			sendCharTOMAS(pomChar);
+			dispalyCharIndex++;
 		}
-	}
 
-	displayOn();
+		displayOn();
+
+	}else
+	{
+		while(pomChar != USART_END_CHAR )
+		{
+			getItem(&myQueue, &pomChar);
+		}
+		
+	}
+	
 }
 
 void sendBackeUnknowMessenge()
 {
 	USART_send(ERROR);
 
-	while (RX_buffer[MSG_index] != USART_END_CHAR)
+	int pomChar;
+	
+	do 
 	{
-		USART_send(RX_buffer[MSG_index]);
+		getItem(&myQueue, &pomChar);
+		//USART_send(pomChar); //vypisovanie buffra
+	} while (pomChar != USART_END_CHAR);
 
-		MSG_index++;
-
-		if (MSG_index < USART_BUFFER)
-		{
-			MSG_index = 0;
-		}
-	}
-
+		
 	USART_send(USART_END_CHAR);
-	USART_send(MSG_index);
-	MSG_index++;
-	if (MSG_index < USART_BUFFER)
-	{
-		MSG_index = 0;
-	}
 }
 
-void moveMSGindex(uint8_t j)
-{
-	for (int i = 0; i < j; i++)
-	{
-		MSG_index++;
-		if (MSG_index < USART_BUFFER)
-		{
-			MSG_index = 0;
-		}
-	}
-}
+
 
 int main(void)
 {
+	
 	setup_Display();
 
 	statusDisplay();
@@ -302,6 +334,9 @@ int main(void)
 	setup_T0_WD();
 
 	sei(); //Povoleni preruseni
+	
+	int temp;
+	
 
 	while (1)
 	{
@@ -310,42 +345,40 @@ int main(void)
 			if (new_msg != 0)
 			{
 				cbi(PORTB, B_LED); //vypnutie modej LED, pripad kekz sprava pride pocas svietenia
-
-				switch (RX_buffer[MSG_index]) //Prvz znak spravz nesie priznak akz typ spravy je prenasany
+				
+				getItem(&myQueue, &temp);
+								
+				switch (temp) //Prvz znak spravz nesie priznak akz typ spravy je prenasany
 				{
-				//Refresh / Change - zmena stavu kamier
-				case REFRESH:
+				
+				case REFRESH:						//Refresh / Change - zmena stavu kamier
 
 				case CHANGED:
 					parseCameraStatus();
 					statusDisplay();
-					refresh_LED(); //Nastavenie LED podla prijatych dat
+					refresh_LED();					//Nastavenie LED podla prijatych dat
 
-					moveMSGindex(4);
+				break;
+
+				
+				case MESSAGE_BASIC:					//Sprava s informaciou od rezie - predpripravena
+					printPrepairedMessage();
+					
+					
 
 					break;
 
-				//Sprava s informaciou od rezie - predpripravena
-				case MESSAGE_BASIC:
-					if (RX_buffer[MSG_index + 1] & CAMERA_MASK)
-					{
-						printPrepairedMessage();
-					}
-
-					moveMSGindex(4);
+				
+				case MESSAGE_ADVANCE:				//Sprava s informaciou od rezie - pisana
+						printRecievedMessage();
 					break;
 
-				//Sprava s informaciou od rezie - pisana
-				case MESSAGE_ADVANCE:
-					printRecievedMessage();
+				
+				case RESPONSE:						//Sprava s informaciou do rezie od kameramanov
 					break;
 
-				//Sprava s informaciou do rezie od kameramanov
-				case RESPONSE:
-					break;
-
-				default:
-					//sendBackeUnknowMessenge();
+				default:							//sendBackeUnknowMessenge();
+					
 					break;
 				}
 				new_msg--; //Nulovanie priznaku novej spravy
@@ -382,21 +415,16 @@ ISR(USART_RX_vect)
 	watchdog = false; // nulovanie chyboveho stavu dispeja
 	timerx = 0;		  // restart casovaca - watchdog
 
-	RX_buffer[RX_index] = UDR0;
-	//USART_send(RX_buffer [RX_index]);  //local echo
-
-	if (RX_buffer[RX_index] == USART_END_CHAR) //Kontrola na koncovi znak spravy
+	uint8_t receivedChar = UDR0;
+	//USART_send(receivedChar);  //local echo
+	
+	if(receivedChar == USART_END_CHAR)
 	{
 		new_msg++;
 	}
-
-	RX_index++;
 	
-	//Kruhovy zasobnik
-	if (!(RX_index < USART_BUFFER))
-	{
-		RX_index = 0;
-	}
+	putItem(&myQueue, receivedChar);
+
 }
 
 ISR(TIMER0_COMPA_vect)
