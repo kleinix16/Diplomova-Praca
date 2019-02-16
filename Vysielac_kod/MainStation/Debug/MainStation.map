@@ -28,6 +28,7 @@ Discarded input sections
  .bss           0x00000000        0x0 main.o
  .text.setTally_CONN
                 0x00000000       0x2c main.o
+ .text.setLED   0x00000000        0xc main.o
  .text.setUp_PC_USART
                 0x00000000       0x3e main.o
  .text.sendCharRFM
@@ -681,61 +682,61 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x238
+.debug_aranges  0x00000000      0x240
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0xb8 main.o
+                0x00000000       0xc0 main.o
  .debug_aranges
-                0x000000b8       0x50 port_driver.o
+                0x000000c0       0x50 port_driver.o
  .debug_aranges
-                0x00000108       0xc8 TC_driver.o
+                0x00000110       0xc8 TC_driver.o
  .debug_aranges
-                0x000001d0       0x68 usart_driver.o
+                0x000001d8       0x68 usart_driver.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x6270
+.debug_info     0x00000000     0x629c
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x284f C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_info    0x0000284f     0x1968 main.o
- .debug_info    0x000041b7      0x7f7 port_driver.o
- .debug_info    0x000049ae     0x1335 TC_driver.o
- .debug_info    0x00005ce3      0x58d usart_driver.o
+ .debug_info    0x0000284f     0x1994 main.o
+ .debug_info    0x000041e3      0x7f7 port_driver.o
+ .debug_info    0x000049da     0x1335 TC_driver.o
+ .debug_info    0x00005d0f      0x58d usart_driver.o
 
-.debug_abbrev   0x00000000     0x2df8
+.debug_abbrev   0x00000000     0x2e0e
  *(.debug_abbrev)
  .debug_abbrev  0x00000000     0x262c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_abbrev  0x0000262c      0x2e3 main.o
- .debug_abbrev  0x0000290f      0x134 port_driver.o
- .debug_abbrev  0x00002a43      0x187 TC_driver.o
- .debug_abbrev  0x00002bca      0x22e usart_driver.o
+ .debug_abbrev  0x0000262c      0x2f9 main.o
+ .debug_abbrev  0x00002925      0x134 port_driver.o
+ .debug_abbrev  0x00002a59      0x187 TC_driver.o
+ .debug_abbrev  0x00002be0      0x22e usart_driver.o
 
-.debug_line     0x00000000     0x1118
+.debug_line     0x00000000     0x1135
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x3b5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_line    0x000003b5      0x586 main.o
- .debug_line    0x0000093b      0x1f8 port_driver.o
- .debug_line    0x00000b33      0x2f7 TC_driver.o
- .debug_line    0x00000e2a      0x2ee usart_driver.o
+ .debug_line    0x000003b5      0x5a3 main.o
+ .debug_line    0x00000958      0x1f8 port_driver.o
+ .debug_line    0x00000b50      0x2f7 TC_driver.o
+ .debug_line    0x00000e47      0x2ee usart_driver.o
 
-.debug_frame    0x00000000      0x648
+.debug_frame    0x00000000      0x658
  *(.debug_frame)
- .debug_frame   0x00000000      0x374 main.o
- .debug_frame   0x00000374       0x90 port_driver.o
- .debug_frame   0x00000404      0x174 TC_driver.o
- .debug_frame   0x00000578       0xd0 usart_driver.o
+ .debug_frame   0x00000000      0x384 main.o
+ .debug_frame   0x00000384       0x90 port_driver.o
+ .debug_frame   0x00000414      0x174 TC_driver.o
+ .debug_frame   0x00000588       0xd0 usart_driver.o
 
-.debug_str      0x00000000     0x3bcd
+.debug_str      0x00000000     0x3bd9
  *(.debug_str)
  .debug_str     0x00000000     0x1aa8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a4u/avrxmega7/crtatxmega128a4u.o
- .debug_str     0x00001aa8      0xe3f main.o
-                                0xeb0 (size before relaxing)
- .debug_str     0x000028e7      0xc1a port_driver.o
+ .debug_str     0x00001aa8      0xe4b main.o
+                                0xebc (size before relaxing)
+ .debug_str     0x000028f3      0xc1a port_driver.o
                                 0xf73 (size before relaxing)
- .debug_str     0x00003501      0x5e5 TC_driver.o
+ .debug_str     0x0000350d      0x5e5 TC_driver.o
                                 0xccb (size before relaxing)
- .debug_str     0x00003ae6       0xe7 usart_driver.o
+ .debug_str     0x00003af2       0xe7 usart_driver.o
                                 0x46e (size before relaxing)
 
 .debug_loc      0x00000000     0x1090
@@ -763,12 +764,12 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x1f8
+.debug_ranges   0x00000000      0x200
  *(.debug_ranges)
- .debug_ranges  0x00000000       0xa8 main.o
- .debug_ranges  0x000000a8       0x40 port_driver.o
- .debug_ranges  0x000000e8       0xb8 TC_driver.o
- .debug_ranges  0x000001a0       0x58 usart_driver.o
+ .debug_ranges  0x00000000       0xb0 main.o
+ .debug_ranges  0x000000b0       0x40 port_driver.o
+ .debug_ranges  0x000000f0       0xb8 TC_driver.o
+ .debug_ranges  0x000001a8       0x58 usart_driver.o
 
 .debug_macro
  *(.debug_macro)

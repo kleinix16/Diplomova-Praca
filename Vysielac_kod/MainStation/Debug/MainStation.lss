@@ -13,21 +13,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000009f4  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000238  00000000  00000000  00000a34  2**0
+  5 .debug_aranges 00000240  00000000  00000000  00000a34  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00006270  00000000  00000000  00000c6c  2**0
+  6 .debug_info   0000629c  00000000  00000000  00000c74  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00002df8  00000000  00000000  00006edc  2**0
+  7 .debug_abbrev 00002e0e  00000000  00000000  00006f10  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001118  00000000  00000000  00009cd4  2**0
+  8 .debug_line   00001135  00000000  00000000  00009d1e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000648  00000000  00000000  0000adec  2**2
+  9 .debug_frame  00000658  00000000  00000000  0000ae54  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00003bcd  00000000  00000000  0000b434  2**0
+ 10 .debug_str    00003bd9  00000000  00000000  0000b4ac  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00001090  00000000  00000000  0000f001  2**0
+ 11 .debug_loc    00001090  00000000  00000000  0000f085  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000001f8  00000000  00000000  00010091  2**0
+ 12 .debug_ranges 00000200  00000000  00000000  00010115  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -469,6 +469,8 @@ void sendSTATUS2RFM(void)
 
 int main(void)
 {
+	//setLED();	
+		
 	setUp_RFM_USART();
  3b6:	0e 94 26 01 	call	0x24c	; 0x24c <setUp_RFM_USART>
 
@@ -482,6 +484,7 @@ int main(void)
 
 	setTimer_Tally();
  3c2:	0e 94 89 01 	call	0x312	; 0x312 <setTimer_Tally>
+	
 
 	// Enable all interrupt levels in PMIC and enable global interrupts.
 	PMIC.CTRL |= PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;

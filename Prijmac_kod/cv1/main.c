@@ -27,6 +27,8 @@ circularQueue_t myQueue;
 
 uint8_t new_msg = 0;
 
+volatile uint8_t portbhistory = 0xFF;     // default is high because the pull-up
+
 bool system_error = false;
 bool watchdog = false;
 
@@ -53,14 +55,14 @@ void setup_LED(void)
 {
 	sbi(LED_DDR, G_LED); //Nastavenie pinu ako vystup
 	sbi(LED_DDR, R_LED);
-	//sbi(LED_DDR, B_LED);
+	sbi(LED_DDR, B_LED);
 
-	cbi(LED_PORT, G_LED); //Nastavenie pociatocnej hodnoty - LEDky nestivtia
-	cbi(LED_PORT, R_LED);
-	//cbi(LED_PORT, B_LED);
+	sbi(LED_PORT, G_LED); //Nastavenie pociatocnej hodnoty - LEDky nestivtia
+	sbi(LED_PORT, R_LED);
+	sbi(LED_PORT, B_LED);
 
-	sbi(DDRB, B_LED); //Modra an testovacej doske
-	cbi(PORTB, B_LED);
+//	sbi(DDRB, B_LED); //Modra an testovacej doske
+//	cbi(PORTB, B_LED);
 }
 
 void setup_BUTTON(void)
@@ -72,6 +74,18 @@ void setup_BUTTON(void)
 	cbi(BUTTON_DDR, BT_1); //Nastavenie pinu ako vstup
 	cbi(BUTTON_DDR, BT_2);
 	cbi(BUTTON_DDR, BT_3);
+	
+	sbi(PCICR, PCIE0); // Pin Change Interrupt enable on PCINT0 (PB0)
+	
+	sbi(PCMSK0, PCINT0);
+	sbi(PCMSK0, PCINT1);
+	sbi(PCMSK0, PCINT2);
+	
+	
+	//PCICR |= _BV(PCIE0);
+	//PCMSK0 |= _BV(PCINT0);
+	
+	
 }
 
 void setup_T0_WD()
@@ -105,8 +119,8 @@ void setup_USART(void)
 	//Nastavovanie AUX portu ako vstup
 
 	//Nastavovanie M0 a M1 ako vystup s urovnou 0
-	DDRC |= (1 << RFM_M0) | (1 << RFM_M1);
-	PORTC &= ~(1 << RFM_M0) & ~(1 << RFM_M1);
+	DDRD |= (1 << RFM_M0) | (1 << RFM_M1);
+	PORTD &= ~(1 << RFM_M0) & ~(1 << RFM_M1);
 
 	//Nastavovanie RX a TX
 	DDRD |= (1 << USART_TX); // Tx output
@@ -251,6 +265,7 @@ void statusDisplay()
 {
 	printTallyNumber(CAM_LIVE, 0, 0); //Velke cislo pre kameru, ktora je von
 	printBigNumber(CAM_READY, 0, 6);  //mensie cislo pre kameru, ktora je von
+	printBigNumber(CAMERA, 4, 13);  //mensie cislo pre kameru, ktora je von
 }
 
 void printPrepairedMessage()
@@ -311,9 +326,9 @@ void printRecievedMessage()
 	}
 }
 
-void sendBackeUnknowMessenge()
+void unknowMessenge()
 {
-	USART_send(ERROR);
+	//USART_send(ERROR);
 
 	int pomChar;
 
@@ -323,7 +338,7 @@ void sendBackeUnknowMessenge()
 		//USART_send(pomChar); //vypisovanie buffra
 	} while (pomChar != USART_END_CHAR);
 
-	USART_send(USART_END_CHAR);
+	//USART_send(USART_END_CHAR);
 }
 
 int main(void)
@@ -335,6 +350,8 @@ int main(void)
 
 	setup_LED();
 	setup_USART();
+	
+	setup_BUTTON();
 
 	setup_T0_WD();
 	setup_T1_showedMess();
@@ -349,7 +366,7 @@ int main(void)
 		{
 			if (new_msg != 0)
 			{
-				cbi(PORTB, B_LED); //vypnutie modej LED, pripad kekz sprava pride pocas svietenia
+				cbi(LED_PORT, B_LED); //vypnutie modej LED, pripad kekz sprava pride pocas svietenia
 
 				getItem(&myQueue, &temp);
 
@@ -383,10 +400,9 @@ int main(void)
 					break;
 
 				case RESPONSE: //Sprava s informaciou do rezie od kameramanov
-					break;
-
+					
 				default: //sendBackeUnknowMessenge();
-					sendBackeUnknowMessenge();
+					unknowMessenge();
 					break;
 				}
 				new_msg--; //Nulovanie priznaku novej spravy
@@ -398,7 +414,7 @@ int main(void)
 			cbi(LED_PORT, R_LED);
 			cbi(LED_PORT, G_LED);
 
-			tbi(PORTB, B_LED);
+			tbi(LED_PORT, B_LED);
 			_delay_ms(WATCHDOG_ERROR);
 		}
 
@@ -458,4 +474,68 @@ ISR(TIMER2_COMPA_vect)
 			statusDisplay();			
 		}
 	}
+}
+
+ISR(PCINT0_vect) 
+{
+	uint8_t changedbits;
+	uint8_t intreading = BUTTON_PIN & 0x7;
+	changedbits = intreading ^ portbhistory;
+	portbhistory = intreading;
+	
+	switch(changedbits){
+
+		case 0: //nothing changed
+		break;
+
+		case 1: //pcint0 changed
+			if(portbhistory & 0x01)
+			{
+				USART_send(RESPONSE);
+				USART_send(CAMERA_MASK);
+				USART_send(YES);
+				USART_send(USART_END_CHAR);
+			}
+			
+		
+		break;
+
+		case 2: //pcint1 changed
+		if(portbhistory & 0x02)
+		{
+			zobrazenaSprava = false;
+			timerx_T2 = 0;
+			clear_display();
+			statusDisplay();
+		}
+		break;
+
+		case 3: //0+1 changed
+	
+		break;
+
+		case 4:  //pcint2 changed
+		if(portbhistory & 0x04)
+		{
+		USART_send(RESPONSE);
+		USART_send(CAMERA_MASK);
+		USART_send(NO);
+		USART_send(USART_END_CHAR);
+		}
+		
+		break;
+
+		case 5: //2+0 changed
+		USART_send(0x05);
+		break;
+
+		case 6: //2+1
+		USART_send(0x06);
+		break;
+
+		case 7: //all changed
+
+		break;
+}
+
 }

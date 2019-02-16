@@ -19,11 +19,14 @@
 //***********MESS STATUS****
 #define REFRESH			0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
 #define CHANGED			0x02	//Sprava generovana pri zmene kamier
-#define MESSAGE_BASIC	65	//Sprava od rezisera - predpripravena
-#define MESSAGE_ADVANCE 70	//Sprava od rezisera - napisana
+#define MESSAGE_BASIC	0x41	//Sprava od rezisera - predpripravena
+#define MESSAGE_ADVANCE 0x46	//Sprava od rezisera - napisana
 #define RESPONSE		0x08	//Odpoved kameramanov
 #define ERROR			0xFF	//Chybna sprava
 
+//***********MESS**********
+#define YES    0x0F
+#define NO     0xF0
 
 //***********TIMES****
 #define WATCHDOG_ERROR 150
@@ -51,10 +54,14 @@
 #define BAUDERATE 9600   
 #define UBRR_VALUE ((F_CPU / (BAUDERATE * 8L)) -1)  //   8....51  ,  16.....25  12.....12
 
+/*
 #define RFM_M0 PORTC2	
 #define RFM_M1 PORTC3
+#define RFM_AUX PORTD6*/
 
-#define RFM_AUX PORTD6
+#define RFM_M0  PORTD2
+#define RFM_M1  PORTD4
+#define RFM_AUX PORTD7
 
 //************I2C*****
 #define I2C_PORT PORTC
@@ -65,12 +72,14 @@
 #define LED_PORT PORTD
 #define LED_DDR DDRD
 
+/*
 #define R_LED PORTD6
 #define G_LED PORTD3
 #define B_LED PORTB1
-//#define B_LED PORTD3
-//#define G_LED PORTD5
-//#define R_LED PORTD6
+*/
+#define B_LED PORTD3
+#define G_LED PORTD5
+#define R_LED PORTD6
 
 
 //**********TLACIDLA****

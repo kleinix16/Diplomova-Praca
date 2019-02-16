@@ -35,8 +35,6 @@ Discarded input sections
  .bss           0x00000000        0x0 main.o
  .text.initBuffer
                 0x00000000       0x2a main.o
- .text.setup_BUTTON
-                0x00000000        0xe main.o
  .text.USART_receive
                 0x00000000       0x10 main.o
  .text          0x00000000        0x0 printMessenge.o
@@ -247,7 +245,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1d3a
+.text           0x00000000     0x1e46
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -321,7 +319,6 @@ END GROUP
                 0x00001242                __vector_12
                 0x00001242                __bad_interrupt
                 0x00001242                __vector_6
-                0x00001242                __vector_3
                 0x00001242                __vector_23
                 0x00001242                __vector_25
                 0x00001242                __vector_11
@@ -355,93 +352,99 @@ END GROUP
  .text.setup_LED
                 0x000012ea        0xe main.o
                 0x000012ea                setup_LED
+ .text.setup_BUTTON
+                0x000012f8       0x2e main.o
+                0x000012f8                setup_BUTTON
  .text.setup_T0_WD
-                0x000012f8       0x18 main.o
-                0x000012f8                setup_T0_WD
+                0x00001326       0x18 main.o
+                0x00001326                setup_T0_WD
  .text.setup_T1_showedMess
-                0x00001310       0x1e main.o
-                0x00001310                setup_T1_showedMess
+                0x0000133e       0x1e main.o
+                0x0000133e                setup_T1_showedMess
  .text.setup_Display
-                0x0000132e       0x1a main.o
-                0x0000132e                setup_Display
+                0x0000135c       0x1a main.o
+                0x0000135c                setup_Display
  .text.setup_USART
-                0x00001348       0x48 main.o
-                0x00001348                setup_USART
+                0x00001376       0x48 main.o
+                0x00001376                setup_USART
  .text.USART_send
-                0x00001390       0x12 main.o
-                0x00001390                USART_send
+                0x000013be       0x12 main.o
+                0x000013be                USART_send
  .text.parseCameraStatus
-                0x000013a2       0xe6 main.o
-                0x000013a2                parseCameraStatus
+                0x000013d0       0xe6 main.o
+                0x000013d0                parseCameraStatus
  .text.refresh_LED
-                0x00001488       0x1e main.o
-                0x00001488                refresh_LED
+                0x000014b6       0x1e main.o
+                0x000014b6                refresh_LED
  .text.statusDisplay
-                0x000014a6       0x26 main.o
-                0x000014a6                statusDisplay
+                0x000014d4       0x36 main.o
+                0x000014d4                statusDisplay
  .text.printPrepairedMessage
-                0x000014cc       0x58 main.o
-                0x000014cc                printPrepairedMessage
+                0x0000150a       0x58 main.o
+                0x0000150a                printPrepairedMessage
  .text.printRecievedMessage
-                0x00001524       0xbe main.o
-                0x00001524                printRecievedMessage
- .text.sendBackeUnknowMessenge
-                0x000015e2       0x38 main.o
-                0x000015e2                sendBackeUnknowMessenge
- .text.main     0x0000161a      0x10c main.o
-                0x0000161a                main
+                0x00001562       0xbe main.o
+                0x00001562                printRecievedMessage
+ .text.unknowMessenge
+                0x00001620       0x2c main.o
+                0x00001620                unknowMessenge
+ .text.main     0x0000164c      0x10a main.o
+                0x0000164c                main
  .text.__vector_18
-                0x00001726       0x6c main.o
-                0x00001726                __vector_18
+                0x00001756       0x6c main.o
+                0x00001756                __vector_18
  .text.__vector_14
-                0x00001792       0x46 main.o
-                0x00001792                __vector_14
+                0x000017c2       0x46 main.o
+                0x000017c2                __vector_14
  .text.__vector_7
-                0x000017d8       0x78 main.o
-                0x000017d8                __vector_7
+                0x00001808       0x78 main.o
+                0x00001808                __vector_7
+ .text.__vector_3
+                0x00001880       0xdc main.o
+                0x00001880                __vector_3
  .text.messCamera
-                0x00001850      0x100 printMessenge.o
-                0x00001850                messCamera
- .text.putItem  0x00001950       0x48 ringBuffer.o
-                0x00001950                putItem
- .text.getItem  0x00001998       0x54 ringBuffer.o
-                0x00001998                getItem
+                0x0000195c      0x100 printMessenge.o
+                0x0000195c                messCamera
+ .text.putItem  0x00001a5c       0x48 ringBuffer.o
+                0x00001a5c                putItem
+ .text.getItem  0x00001aa4       0x54 ringBuffer.o
+                0x00001aa4                getItem
  .text.ssd1306_command
-                0x000019ec       0x20 ssd1306.o
-                0x000019ec                ssd1306_command
+                0x00001af8       0x20 ssd1306.o
+                0x00001af8                ssd1306_command
  .text.InitializeDisplay
-                0x00001a0c       0xd4 ssd1306.o
-                0x00001a0c                InitializeDisplay
+                0x00001b18       0xd4 ssd1306.o
+                0x00001b18                InitializeDisplay
  .text.displayOn
-                0x00001ae0        0x8 ssd1306.o
-                0x00001ae0                displayOn
+                0x00001bec        0x8 ssd1306.o
+                0x00001bec                displayOn
  .text.displayOff
-                0x00001ae8        0x8 ssd1306.o
-                0x00001ae8                displayOff
+                0x00001bf4        0x8 ssd1306.o
+                0x00001bf4                displayOff
  .text.SendChar
-                0x00001af0       0x20 ssd1306.o
-                0x00001af0                SendChar
- .text.setXY    0x00001b10       0x2e ssd1306.o
-                0x00001b10                setXY
+                0x00001bfc       0x20 ssd1306.o
+                0x00001bfc                SendChar
+ .text.setXY    0x00001c1c       0x2e ssd1306.o
+                0x00001c1c                setXY
  .text.clear_display
-                0x00001b3e       0x26 ssd1306.o
-                0x00001b3e                clear_display
+                0x00001c4a       0x26 ssd1306.o
+                0x00001c4a                clear_display
  .text.printBigNumber
-                0x00001b64       0xb0 ssd1306.o
-                0x00001b64                printBigNumber
- .text.sendStr  0x00001c14       0x58 ssd1306.o
-                0x00001c14                sendStr
+                0x00001c70       0xb0 ssd1306.o
+                0x00001c70                printBigNumber
+ .text.sendStr  0x00001d20       0x58 ssd1306.o
+                0x00001d20                sendStr
  .text.printTallyNumber
-                0x00001c6c       0x70 ssd1306.o
-                0x00001c6c                printTallyNumber
+                0x00001d78       0x70 ssd1306.o
+                0x00001d78                printTallyNumber
  .text.sendCharTOMAS
-                0x00001cdc       0x5a ssd1306.o
-                0x00001cdc                sendCharTOMAS
-                0x00001d36                . = ALIGN (0x2)
+                0x00001de8       0x5a ssd1306.o
+                0x00001de8                sendCharTOMAS
+                0x00001e42                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001d36        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x00001d36                _exit
-                0x00001d36                exit
+ .fini9         0x00001e42        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00001e42                _exit
+                0x00001e42                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -460,11 +463,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001d36        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00001e42        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001d3a                _etext = .
+                0x00001e46                _etext = .
 
-.data           0x00800100       0x4a load address 0x00001d3a
+.data           0x00800100       0x4c load address 0x00001e46
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -474,47 +477,51 @@ END GROUP
  .data.CAM_READY
                 0x00800101        0x1 main.o
                 0x00800101                CAM_READY
+ .data.portbhistory
+                0x00800102        0x1 main.o
+                0x00800102                portbhistory
  .data._i2c_address
-                0x00800102        0x1 ssd1306.o
-                0x00800102                _i2c_address
+                0x00800103        0x1 ssd1306.o
+                0x00800103                _i2c_address
  *(.gnu.linkonce.d*)
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800103       0x47 printMessenge.o
+                0x00800104       0x47 printMessenge.o
  *(.gnu.linkonce.r*)
-                0x0080014a                . = ALIGN (0x2)
-                0x0080014a                _edata = .
-                0x0080014a                PROVIDE (__data_end, .)
+                0x0080014c                . = ALIGN (0x2)
+ *fill*         0x0080014b        0x1 
+                0x0080014c                _edata = .
+                0x0080014c                PROVIDE (__data_end, .)
 
-.bss            0x0080014a      0x40e
-                0x0080014a                PROVIDE (__bss_start, .)
+.bss            0x0080014c      0x40e
+                0x0080014c                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.zobrazenaSprava
-                0x0080014a        0x1 main.o
-                0x0080014a                zobrazenaSprava
- .bss.watchdog  0x0080014b        0x1 main.o
-                0x0080014b                watchdog
- .bss.system_error
                 0x0080014c        0x1 main.o
-                0x0080014c                system_error
- .bss.new_msg   0x0080014d        0x1 main.o
-                0x0080014d                new_msg
+                0x0080014c                zobrazenaSprava
+ .bss.watchdog  0x0080014d        0x1 main.o
+                0x0080014d                watchdog
+ .bss.system_error
+                0x0080014e        0x1 main.o
+                0x0080014e                system_error
+ .bss.new_msg   0x0080014f        0x1 main.o
+                0x0080014f                new_msg
  *(COMMON)
- COMMON         0x0080014e      0x40a main.o
-                0x0080014e                myQueue
-                0x00800554                timerx_T2
-                0x00800556                timerx_T0
-                0x00800558                PROVIDE (__bss_end, .)
-                0x00001d3a                __data_load_start = LOADADDR (.data)
-                0x00001d84                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800150      0x40a main.o
+                0x00800150                myQueue
+                0x00800556                timerx_T2
+                0x00800558                timerx_T0
+                0x0080055a                PROVIDE (__bss_end, .)
+                0x00001e46                __data_load_start = LOADADDR (.data)
+                0x00001e92                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800558        0x0
+.noinit         0x0080055a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800558                _end = .
+                0x0080055a                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -583,30 +590,30 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x200
+.debug_aranges  0x00000000      0x208
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x50 I2C.o
  .debug_aranges
-                0x00000050       0xb0 main.o
+                0x00000050       0xb8 main.o
  .debug_aranges
-                0x00000100       0x20 printMessenge.o
+                0x00000108       0x20 printMessenge.o
  .debug_aranges
-                0x00000120       0x38 ringBuffer.o
+                0x00000128       0x38 ringBuffer.o
  .debug_aranges
-                0x00000158       0xa8 ssd1306.o
+                0x00000160       0xa8 ssd1306.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2425
+.debug_info     0x00000000     0x2550
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0x1ab I2C.o
- .debug_info    0x0000079f      0xa10 main.o
- .debug_info    0x000011af      0x3b0 printMessenge.o
- .debug_info    0x0000155f      0x19b ringBuffer.o
- .debug_info    0x000016fa      0xd2b ssd1306.o
+ .debug_info    0x0000079f      0xb3b main.o
+ .debug_info    0x000012da      0x3b0 printMessenge.o
+ .debug_info    0x0000168a      0x19b ringBuffer.o
+ .debug_info    0x00001825      0xd2b ssd1306.o
 
 .debug_abbrev   0x00000000      0xd00
  *(.debug_abbrev)
@@ -617,44 +624,44 @@ END GROUP
  .debug_abbrev  0x000009b5      0x112 ringBuffer.o
  .debug_abbrev  0x00000ac7      0x239 ssd1306.o
 
-.debug_line     0x00000000     0x12bb
+.debug_line     0x00000000     0x136e
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000133      0x2aa I2C.o
- .debug_line    0x000003dd      0x6c1 main.o
- .debug_line    0x00000a9e      0x17d printMessenge.o
- .debug_line    0x00000c1b       0xff ringBuffer.o
- .debug_line    0x00000d1a      0x5a1 ssd1306.o
+ .debug_line    0x000003dd      0x774 main.o
+ .debug_line    0x00000b51      0x17d printMessenge.o
+ .debug_line    0x00000cce       0xff ringBuffer.o
+ .debug_line    0x00000dcd      0x5a1 ssd1306.o
 
-.debug_frame    0x00000000      0x598
+.debug_frame    0x00000000      0x5f0
  *(.debug_frame)
  .debug_frame   0x00000000       0x84 I2C.o
- .debug_frame   0x00000084      0x258 main.o
- .debug_frame   0x000002dc       0x30 printMessenge.o
- .debug_frame   0x0000030c       0x54 ringBuffer.o
- .debug_frame   0x00000360      0x238 ssd1306.o
+ .debug_frame   0x00000084      0x2b0 main.o
+ .debug_frame   0x00000334       0x30 printMessenge.o
+ .debug_frame   0x00000364       0x54 ringBuffer.o
+ .debug_frame   0x000003b8      0x238 ssd1306.o
 
-.debug_str      0x00000000      0x822
+.debug_str      0x00000000      0x848
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_str     0x00000208      0x1b0 I2C.o
                                 0x1ee (size before relaxing)
- .debug_str     0x000003b8      0x31b main.o
-                                0x49f (size before relaxing)
- .debug_str     0x000006d3       0x29 printMessenge.o
+ .debug_str     0x000003b8      0x341 main.o
+                                0x4c5 (size before relaxing)
+ .debug_str     0x000006f9       0x29 printMessenge.o
                                 0x1ca (size before relaxing)
- .debug_str     0x000006fc       0x30 ringBuffer.o
+ .debug_str     0x00000722       0x30 ringBuffer.o
                                 0x17c (size before relaxing)
- .debug_str     0x0000072c       0xf6 ssd1306.o
+ .debug_str     0x00000752       0xf6 ssd1306.o
                                 0x369 (size before relaxing)
 
-.debug_loc      0x00000000     0x13bd
+.debug_loc      0x00000000     0x159e
  *(.debug_loc)
  .debug_loc     0x00000000      0x180 I2C.o
- .debug_loc     0x00000180      0x537 main.o
- .debug_loc     0x000006b7       0x65 printMessenge.o
- .debug_loc     0x0000071c       0xb4 ringBuffer.o
- .debug_loc     0x000007d0      0xbed ssd1306.o
+ .debug_loc     0x00000180      0x718 main.o
+ .debug_loc     0x00000898       0x65 printMessenge.o
+ .debug_loc     0x000008fd       0xb4 ringBuffer.o
+ .debug_loc     0x000009b1      0xbed ssd1306.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -674,13 +681,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x1c8
+.debug_ranges   0x00000000      0x1d0
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x40 I2C.o
- .debug_ranges  0x00000040       0xa0 main.o
- .debug_ranges  0x000000e0       0x10 printMessenge.o
- .debug_ranges  0x000000f0       0x28 ringBuffer.o
- .debug_ranges  0x00000118       0xb0 ssd1306.o
+ .debug_ranges  0x00000040       0xa8 main.o
+ .debug_ranges  0x000000e8       0x10 printMessenge.o
+ .debug_ranges  0x000000f8       0x28 ringBuffer.o
+ .debug_ranges  0x00000120       0xb0 ssd1306.o
 
 .debug_macro
  *(.debug_macro)

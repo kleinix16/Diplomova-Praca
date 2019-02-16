@@ -25,7 +25,8 @@
 #define NORMAL          0x00
 #define REFRESH         0x01	//Automaticka sprava, pre kontrolu funkcnosti komunikacie
 #define CHANGED         0x02	//Sprava generovana pri zmene kamier
-#define MESSAGE			0x04	//Sprava od rezisera - napisana
+#define MESSAGE_OWN		0x47	//Sprava od rezisera - napisana
+#define MESSAGE			0x41	//Sprava od rezisera - predpripravena
 #define RESPONSE		0x08	//Odpoved kameramanov
 #define ERROR			0xFF	//Chybna sprava
 

@@ -70,6 +70,13 @@ void setTally_CONN()
 					   PORT_ISC_RISING_gc);
 }
 
+void setLED()
+{
+	unsigned char const mask = PIN0_bm | PIN1_bm | PIN2_bm; // We only want to use pin 0, 1, and 2 of the LED port.
+	PORTD.DIR = mask;    // Set all pins of port D to output.
+	PORTD.OUT = 0x00;    // Set upper four bits high.
+}
+
 void setUp_RFM_USART()
 {
 	/*
@@ -299,6 +306,8 @@ void sendSTATUS2RFM(void)
 
 int main(void)
 {
+	//setLED();	
+		
 	setUp_RFM_USART();
 
 	//setUp_PC_USART();
@@ -308,6 +317,7 @@ int main(void)
 	setTimer_Beacon();
 
 	setTimer_Tally();
+	
 
 	// Enable all interrupt levels in PMIC and enable global interrupts.
 	PMIC.CTRL |= PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
