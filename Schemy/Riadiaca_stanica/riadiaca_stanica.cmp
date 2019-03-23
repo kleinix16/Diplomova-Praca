@@ -1,0 +1,339 @@
+Cmp-Mod V01 Created by PcbNew   date = 4/18/2018 5:47:36 PM
+
+BeginCmp
+TimeStamp = 5ACDD633
+Path = /5ACD4921
+Reference =  ;
+ValeurCmp = Jumper;
+IdModule  = PIN3:Pin_Header_Straight_1x03_Pitch2.54mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD61A
+Path = /5AC8F3F1
+Reference = [NoRef];
+ValeurCmp = TALLY;
+IdModule  = DSUB-moj:DSUB-15_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5AD2F9D3
+Path = 
+Reference = [NoRef];
+ValeurCmp = 1pin;
+IdModule  = Connectors:1pin;
+EndCmp
+
+BeginCmp
+TimeStamp = 5AD2F905
+Path = 
+Reference =  ;
+ValeurCmp = 1pin;
+IdModule  = Connectors:1pin;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD6ED
+Path = /5ABF85F3
+Reference = Y1;
+ValeurCmp = Crystal;
+IdModule  = Crystals:Crystal_SMD_5032-2pin_5.0x3.2mm_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD6B5
+Path = /5AC980FE
+Reference = U1;
+ValeurCmp = SOT 233;
+IdModule  = TO_SOT_Packages_SMD:SOT-223-3_TabPin2;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD6AD
+Path = /5ABF5EDF
+Reference = SW1;
+ValeurCmp = RESET;
+IdModule  = Buttons_Switches_SMD:SW_SPST_EVQP0;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD6A5
+Path = /5AC8E3CF
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD69F
+Path = /5AC8E3C9
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD699
+Path = /5AC8E3C3
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD693
+Path = /5AC8E3BD
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD68D
+Path = /5AC8E28F
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD687
+Path = /5AC8E289
+Reference = R14-19;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD681
+Path = /5AC8E283
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD67B
+Path = /5AC8E27D
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD675
+Path = /5AC8E1BD
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD66F
+Path = /5AC8E1B7
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD669
+Path = /5AC8DE09
+Reference = [NoRef];
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD663
+Path = /5AC8DD94
+Reference = R8-13;
+ValeurCmp = 4k7;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD65D
+Path = /5ACD2771
+Reference = R7;
+ValeurCmp = 100R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD657
+Path = /5AC8C011
+Reference = R6;
+ValeurCmp = M1;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD651
+Path = /5AC08CFE
+Reference = R5;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD64B
+Path = /5AC08C4B
+Reference = R4;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD645
+Path = /5ABF8E6A
+Reference = R3;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD63F
+Path = /5ABF8E09
+Reference = R2;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD639
+Path = /5ABF8D08
+Reference = R1;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD62C
+Path = /5AC87AC2
+Reference =  ;
+ValeurCmp = Jumper;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x03_Pitch2.54mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD625
+Path = /5ABF60B7
+Reference =  ;
+ValeurCmp = LoRa - SX1276;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x07_Pitch2.54mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD607
+Path = /5ABF6024
+Reference =  ;
+ValeurCmp = BLUETOOTH;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x06_Pitch2.54mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5FD
+Path = /5ACDAD63
+Reference =  ;
+ValeurCmp = USB_OTG;
+IdModule  = Connectors_USB:USB_Micro-B_Molex_47346-0001;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5EE
+Path = /5ABF6135
+Reference =  ;
+ValeurCmp = PID;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x03_Pitch2.54mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5E4
+Path = /5AC93A5C
+Reference =  ;
+ValeurCmp = Inter;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x07_Pitch2.54mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5D2
+Path = /5ABF6314
+Reference = D1;
+ValeurCmp = LED_RGB;
+IdModule  = LED_SMD:LED_RGB_5050-6;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5C8
+Path = /5ACD293A
+Reference = C8;
+ValeurCmp = M1;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5C2
+Path = /5AC8A50D
+Reference = C7;
+ValeurCmp = M1;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5B6
+Path = /5ABF6CCC
+Reference = C5;
+ValeurCmp = M1;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5B0
+Path = /5ABF87C9
+Reference = C4;
+ValeurCmp = C;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5AA
+Path = /5ABF86B0
+Reference = C3;
+ValeurCmp = C;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5A4
+Path = /5AC98DBA
+Reference = C2;
+ValeurCmp = 22M;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD59E
+Path = /5AC9862F
+Reference = C1;
+ValeurCmp = M1;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD6E5
+Path = /5ABE2BB6
+Reference = U2;
+ValeurCmp = ATXMEGA128A4-AU;
+IdModule  = Housings_QFP:LQFP-44_10x10mm_Pitch0.8mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5ACDD5BC
+Path = /5AC8A483
+Reference = C6;
+ValeurCmp = 2M2;
+IdModule  = Capacitors_SMD:C_0805_HandSoldering;
+EndCmp
+
+EndListe
