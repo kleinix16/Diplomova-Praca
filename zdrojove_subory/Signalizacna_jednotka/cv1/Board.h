@@ -11,8 +11,8 @@
 #endif
 
 //***********CAMERA****
-#define CAMERA 5
-#define CAMERA_MASK 0x10
+#define CAMERA 3
+#define CAMERA_MASK 0x04
 
 //***********MESSENGE STATUS****
 #define REFRESH			 0x01	//automatic generated message
