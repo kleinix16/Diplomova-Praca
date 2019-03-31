@@ -541,12 +541,12 @@ ISR(TIMER2_COMPA_vect)
 /************************************************************************/
 ISR(PCINT0_vect) 
 {
-	uint8_t changedbits;						
+	uint8_t changedBits;						
 	uint8_t intreading = BUTTON_PIN & 0x7;		//read pin status and use mask for first 3 bits
-	changedbits = intreading ^ portbHistory;	//XOR operation with last change status - control to press - 1 or release - button
+	changedBits = intreading ^ portbHistory;	//XOR operation with last change status - control to press - 1 or release - button
 	portbHistory = intreading;					//save last status of port
 	
-	switch(changedbits){						//What button was pressed
+	switch(changedBits){						//What button was pressed
 
 		case 0:									//nothing changed
 		break;
@@ -580,7 +580,7 @@ ISR(PCINT0_vect)
 		if(portbHistory & 0x04)					//changed to press
 		{
 		sendChar_RFM(RESPONSE);
-		sendChar_RFM(CAMERA_MASK);
+		sendChar_RFM(CAMERA);
 		sendChar_RFM(NO);
 		sendChar_RFM(RFM_END_CHAR);
 		}

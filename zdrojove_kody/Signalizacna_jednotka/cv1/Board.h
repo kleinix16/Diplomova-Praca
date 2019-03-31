@@ -43,7 +43,7 @@
 #define RFM_TX PORTD1
 #define RFM_RX PORTD0
 
-#define RFM_END_CHAR 0xFF
+#define RFM_END_CHAR 0x7E
 
 #define BAUDERATE 9600   
 #define UBRR_VALUE ((F_CPU / (BAUDERATE * 8L)) -1)  

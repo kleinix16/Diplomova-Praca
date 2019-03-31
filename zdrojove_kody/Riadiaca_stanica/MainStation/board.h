@@ -41,7 +41,7 @@
 
 /***********USART*********/
 #define RX_NUM_BYTES  128
-#define UART_END_CHAR 0xFF
+#define UART_END_CHAR 0x7E
 
 /*********BLUETOOTH*******/
 #define BLT_USART USARTC1
