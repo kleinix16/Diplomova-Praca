@@ -1,5 +1,8 @@
-# Diplomova praca - Komunikacia pre kameramanov
+# Diplomova praca - Komunikačný systém pre kameramanov
 
--Zdrojove kody
--Schemy
--Samotna praca
+Bc. Tomáš Klein
+Komunikačný systém pre kameramanov
+Vedúci práce:  prof. Ing. Juraj Miček, PhD.
+Registračné číslo:  28360820192562
+
+Žilina, 2019 
