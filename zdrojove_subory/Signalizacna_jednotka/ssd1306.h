@@ -56,12 +56,12 @@ void display_turnOff(void);
 void dispaly_clear(void);
 void printBigTime(char *string);
 void reset_display(void);
-void printBigNumber(int num, int X, int Y);
+void printReadyNumber(uint8_t camera, int X, int Y);
 void bmp(bitmap_t b);
 void setPageAddress();
 void setColAddress();
-
-void printTallyNumber(int camera, int X, int Y);
+void printLiveNumber(uint8_t camera, int X, int Y);
 void display_sendChar(unsigned char data);
+void printBootLogo();
 
 #endif /* SSD1306_H_ */

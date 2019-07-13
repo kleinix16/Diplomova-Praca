@@ -224,7 +224,7 @@ uint8_t parseCameraStatus()
 	}
 	else
 	{
-		liveCameras = 0;					//default status
+		liveCameras = 7;					//default status
 	}
 
 	//Parse what camera is in READY status from received data
@@ -258,7 +258,7 @@ uint8_t parseCameraStatus()
 	}
 	else
 	{
-		readyCameras = 0;			   //default status
+		readyCameras = 7;			   //default status
 	}
 
 	int temp;
@@ -303,9 +303,9 @@ void refresh_LED()
 /************************************************************************/
 void display_cameraState()
 {
-	printTallyNumber(liveCameras, 0, 0); //the biggest number for LIVE camera
-	printBigNumber(readyCameras, 0, 6);  //ready camera
-	printBigNumber(CAMERA, 4, 13);		 //number of actual camera
+	printLiveNumber(liveCameras, 0, 0); //the biggest number for LIVE camera
+	printReadyNumber(readyCameras, 0, 6);  //ready camera
+	printReadyNumber(CAMERA, 4, 13);		 //number of actual camera
 }
 
 /************************************************************************/
@@ -402,7 +402,8 @@ int main(void)
 	initializeQueue(&RX_ringBuffer);  //Initialization ring buffer for received data from RF module
 	
 	init_display();
-	display_cameraState();
+	//display_cameraState();
+	printBootLogo();
 	
 	init_LED();
 	init_RFM_UART();
@@ -411,6 +412,11 @@ int main(void)
 	init_T2_autoDisplayCleaner();
 
 	sei(); //enable global interrupt
+	
+	_delay_ms(5000); 
+	dispaly_clear();
+	display_cameraState();
+	
 
 	int messageStatus;
 

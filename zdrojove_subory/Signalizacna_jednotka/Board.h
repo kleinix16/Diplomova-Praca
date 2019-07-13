@@ -11,8 +11,8 @@
 #endif
 
 //***********CAMERA****
-#define CAMERA 3
-#define CAMERA_MASK 0x04		//bit representation of camera - 0b00000100
+#define CAMERA 1
+#define CAMERA_MASK 1<<(CAMERA-1)		//bit representation of camera - 0b00000100
 
 //***********MESSENGE STATUS****
 #define REFRESH			 0x01	//automatic generated message
@@ -81,3 +81,4 @@
 
 
 #endif /* BOARD_H_ */
+

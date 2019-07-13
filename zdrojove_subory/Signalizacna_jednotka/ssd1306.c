@@ -174,29 +174,23 @@ void dispaly_clear(void)
 // Prints a display big number (96 bytes) in coordinates X Y,
 // being multiples of 8. This means we have 16 COLS (0-15)
 // and 8 ROWS (0-7).
-void printBigNumber(int num, int X, int Y)
+void printReadyNumber(uint8_t camera, int X, int Y)
 {
-	setXY(X, Y);
-	int salto = 0;
-	for (int i = 0; i < 96; i++)
+	
+	uint8_t cam_print = camera;
+	if(camera > 6)
 	{
-		if (num > 9)
+		cam_print = 7;     //Char - unknown camera
+	}
+	
+	for (int j = 0; j < 4; j++)
+	{
+		setXY(X, Y);
+		for (int i = 0; i < widthReadyFont; i++)
 		{
-			SendChar(pgm_read_byte(bigNumbers[10] + i));
+			SendChar(pgm_read_byte(readyNumbers[cam_print] + (i + j * widthReadyFont)));
 		}
-		else
-			SendChar(pgm_read_byte(bigNumbers[num] + i));
-
-		if (salto == 23)
-		{
-			salto = 0;
-			X++;
-			setXY(X, Y);
-		}
-		else
-		{
-			salto++;
-		}
+		X++;
 	}
 }
 
@@ -223,12 +217,12 @@ void sendCharXY(unsigned char data, int X, int Y)
 	I2C_Write(0x40);		 //data mode
 
 	for (int i = 0; i < 8; i++)
-		I2C_Write(pgm_read_byte(myFont[data - 0x20] + i));
+		I2C_Write(pgm_read_byte(smallFont[data - 0x20] + i));
 
 	I2C_Stop(); // stop transmitting
 }
 
-//==========================================================//
+//==========================================================//c
 // Set the cursor position in a 16 COL * 8 ROW map.
 void setXY(unsigned char row, unsigned char col)
 {
@@ -246,7 +240,7 @@ void display_sendString(char *string)
 	{
 		for (i = 0; i < 8; i++)
 		{
-			SendChar(pgm_read_byte(myFont[*string - 0x20] + i));
+			SendChar(pgm_read_byte(smallFont[*string - 0x20] + i));
 		}
 		string++;
 	}
@@ -263,7 +257,7 @@ void sendStrXY(char *string, int X, int Y)
 	{
 		for (i = 0; i < 8; i++)
 		{
-			SendChar(pgm_read_byte(myFont[*string - 0x20] + i));
+			SendChar(pgm_read_byte(smallFont[*string - 0x20] + i));
 		}
 		string++;
 	}
@@ -272,9 +266,9 @@ void sendStrXY(char *string, int X, int Y)
 
 //==========================================================//
 // Prints a display TALLY big number in coordinates X Y
-void printTallyNumber(int camera, int X, int Y)
+void printLiveNumber(uint8_t camera, int X, int Y)
 {
-	int cam_print = camera;
+	uint8_t cam_print = camera;
 	if(camera > 6)
 	{
 		cam_print = 7;
@@ -282,12 +276,30 @@ void printTallyNumber(int camera, int X, int Y)
 	for (int j = 0; j < 8; j++)
 	{
 		setXY(X, Y);
-		for (int i = 0; i < wightTallyFont; i++)
+		for (int i = 0; i < widthLiveFont; i++)
 		{
-			SendChar(pgm_read_byte(tallyNumbers[cam_print] + (i + j * wightTallyFont)));
+			SendChar(pgm_read_byte(liveNumbers[cam_print] + (i + j * widthLiveFont)));
 		}
 		X++;
 	}
+}
+
+//==========================================================//
+// Prints a display TALLY big number in coordinates X Y
+void printBootLogo()
+{
+
+	uint8_t X = 0;
+	for (int j = 0; j < 8; j++)
+	{
+		setXY(X, 0);
+		for (int i = 0; i < 128; i++)
+		{
+			SendChar(pgm_read_byte(bootLogo[j]+(i)));
+		}
+		X++;
+	}
+
 }
 
 
@@ -300,7 +312,7 @@ void display_sendChar(unsigned char data)
 	I2C_Write(0x40);		 //data mode
 
 	for (int i = 0; i < 8; i++)
-		I2C_Write(pgm_read_byte(myFont[data - 0x20] + i));
+		I2C_Write(pgm_read_byte(smallFont[data - 0x20] + i));
 
 	I2C_Stop(); // stop transmitting
 }
